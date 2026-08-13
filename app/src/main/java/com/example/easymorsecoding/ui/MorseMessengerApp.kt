@@ -1,0 +1,389 @@
+package com.example.easymorsecoding.ui
+
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Help
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.easymorsecoding.viewmodel.MorseViewModel
+import com.example.easymorsecoding.viewmodel.PlaybackState
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MorseMessengerApp(
+    viewModel: MorseViewModel,
+    onRequestPermission: () -> Unit,
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val scrollState = rememberScrollState()
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Morse Messenger") },
+                actions = {
+                    IconButton(onClick = { /* Help dialog handled by HelpSection */ }) {
+                        Icon(Icons.Default.Info, contentDescription = "About Morse Messenger")
+                    }
+                }
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Visual Flash Panel
+            FlashPanel(isActive = uiState.isScreenActive)
+
+            // Countdown Display
+            if (uiState.playbackState == PlaybackState.COUNTDOWN) {
+                Text(
+                    text = uiState.currentCountdown?.toString() ?: "",
+                    fontSize = 64.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.semantics { contentDescription = "Countdown: ${uiState.currentCountdown}" }
+                )
+            }
+
+            // Text Input
+            OutlinedTextField(
+                value = uiState.message,
+                onValueChange = { viewModel.onMessageChange(it) },
+                label = { Text("Message to Encode") },
+                modifier = Modifier.fillMaxWidth(),
+                minLines = 3,
+                maxLines = 5,
+                enabled = uiState.playbackState == PlaybackState.IDLE,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+            )
+
+            // Morse Translation Display
+            if (uiState.morseDisplay.isNotEmpty()) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    shape = MaterialTheme.shapes.medium
+                ) {
+                    Column(modifier = Modifier.padding(12.dp)) {
+                        Text(
+                            text = "Morse Translation:",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            text = uiState.morseDisplay,
+                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                            fontSize = 18.sp,
+                            modifier = Modifier.semantics { contentDescription = "Morse translation of your message" }
+                        )
+                    }
+                }
+            } else if (uiState.message.isEmpty()) {
+                Text(
+                    "Enter a message to see the Morse translation",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(vertical = 16.dp)
+                )
+            }
+
+            // Playback Progress
+            if (uiState.playbackState == PlaybackState.PLAYING) {
+                PlaybackProgress(uiState = uiState)
+            }
+
+            // Controls
+            SettingsSection(
+                uiState = uiState,
+                viewModel = viewModel,
+                onRequestPermission = onRequestPermission
+            )
+
+            // Play/Pause/Stop Buttons
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                if (uiState.playbackState == PlaybackState.IDLE) {
+                    Button(
+                        onClick = { viewModel.startPlayback() },
+                        modifier = Modifier.weight(1f),
+                        enabled = uiState.message.isNotBlank()
+                    ) {
+                        Icon(Icons.Default.PlayArrow, contentDescription = null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Play")
+                    }
+                } else {
+                    if (uiState.playbackState == PlaybackState.PLAYING) {
+                        Button(
+                            onClick = { viewModel.togglePause() },
+                            modifier = Modifier.weight(1f),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = if (uiState.isPaused) MaterialTheme.colorScheme.secondary 
+                                                else MaterialTheme.colorScheme.tertiary
+                            )
+                        ) {
+                            Icon(
+                                if (uiState.isPaused) Icons.Default.PlayArrow else Icons.Default.Pause,
+                                contentDescription = null
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(if (uiState.isPaused) "Resume" else "Pause")
+                        }
+                    }
+                    
+                    Button(
+                        onClick = { viewModel.stopPlayback() },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                    ) {
+                        Icon(Icons.Default.Stop, contentDescription = null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("Stop")
+                    }
+                }
+            }
+
+            // Help Section
+            HelpSection()
+        }
+    }
+}
+
+@Composable
+fun PlaybackProgress(uiState: com.example.easymorsecoding.viewmodel.MorseUiState) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        LinearProgressIndicator(
+            progress = {
+                val total = uiState.signals.size
+                val current = uiState.currentSignalIndex ?: 0
+                if (total > 0) current.toFloat() / total else 0f
+            },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val currentIndex = uiState.currentSignalIndex ?: -1
+            uiState.signals.forEachIndexed { index, signal ->
+                // Only show a window of signals to avoid overcrowding
+                if (index in (currentIndex - 5)..(currentIndex + 5)) {
+                    val color = if (index == currentIndex) {
+                        MaterialTheme.colorScheme.primary
+                    } else if (index < currentIndex) {
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    }
+                    
+                    val text = when (signal.isActive) {
+                        true -> if (signal.durationUnits == 1) "●" else "▬"
+                        false -> " "
+                    }
+                    
+                    Text(
+                        text = text,
+                        color = color,
+                        fontSize = if (index == currentIndex) 24.sp else 18.sp,
+                        fontWeight = if (index == currentIndex) FontWeight.Bold else FontWeight.Normal,
+                        modifier = Modifier.padding(horizontal = 2.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun HelpSection() {
+    var expanded by remember { mutableStateOf(false) }
+    
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = { expanded = !expanded }
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.AutoMirrored.Filled.Help, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
+                Text("Help & Safety", fontWeight = FontWeight.Bold)
+                Spacer(Modifier.weight(1f))
+                Icon(
+                    if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                    contentDescription = null
+                )
+            }
+            if (expanded) {
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    "Morse Timing:\n" +
+                    "• Dot: 1 unit\n" +
+                    "• Dash: 3 units\n" +
+                    "• Character Gap: 3 units\n" +
+                    "• Word Gap: 7 units\n\n" +
+                    "Flashlight Safety:\n" +
+                    "The phone's flashlight can become hot with extended use. Use with caution. " +
+                    "Playback will stop automatically if you leave the app.",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun FlashPanel(isActive: Boolean) {
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isActive) Color.White else Color.DarkGray,
+        animationSpec = tween(durationMillis = 50), label = ""
+    )
+    
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .background(backgroundColor, MaterialTheme.shapes.medium)
+            .semantics {
+                contentDescription = if (isActive) "Signal Active" else "Signal Inactive"
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        if (isActive) {
+            Icon(
+                Icons.Default.Lightbulb,
+                contentDescription = null,
+                tint = Color.Yellow,
+                modifier = Modifier.size(64.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun SettingsSection(
+    uiState: com.example.easymorsecoding.viewmodel.MorseUiState,
+    viewModel: MorseViewModel,
+    onRequestPermission: () -> Unit
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text("Outputs", fontWeight = FontWeight.Bold)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = uiState.useScreen,
+                onCheckedChange = { viewModel.onToggleScreen(it) },
+                enabled = uiState.playbackState == PlaybackState.IDLE
+            )
+            Text("Screen Flash")
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = uiState.useFlashlight,
+                onCheckedChange = { 
+                    if (it) onRequestPermission() else viewModel.onToggleFlashlight(false)
+                },
+                enabled = uiState.playbackState == PlaybackState.IDLE && uiState.hasFlashlight
+            )
+            Text("Phone Flashlight")
+            if (!uiState.hasFlashlight) {
+                Text(
+                    " (Not Available)",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = uiState.useSound,
+                onCheckedChange = { viewModel.onToggleSound(it) },
+                enabled = uiState.playbackState == PlaybackState.IDLE
+            )
+            Text("Sound")
+        }
+
+        HorizontalDivider()
+
+        Text("Timing", fontWeight = FontWeight.Bold)
+        
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Speed (WPM): ${uiState.wpm}")
+            Slider(
+                value = uiState.wpm.toFloat(),
+                onValueChange = { viewModel.onWpmChange(it.toInt()) },
+                valueRange = 5f..30f,
+                steps = 24,
+                enabled = uiState.playbackState == PlaybackState.IDLE,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+                    .semantics { contentDescription = "Playback speed: ${uiState.wpm} words per minute" }
+            )
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Countdown: ")
+            val countdownOptions = listOf(0, 3, 5, 10, 30)
+            var expanded by remember { mutableStateOf(false) }
+            
+            Box {
+                TextButton(
+                    onClick = { expanded = true },
+                    enabled = uiState.playbackState == PlaybackState.IDLE
+                ) {
+                    Text("${uiState.countdownSeconds}s")
+                }
+                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                    countdownOptions.forEach { seconds ->
+                        DropdownMenuItem(
+                            text = { Text("${seconds}s") },
+                            onClick = {
+                                viewModel.onCountdownSecondsChange(seconds)
+                                expanded = false
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
