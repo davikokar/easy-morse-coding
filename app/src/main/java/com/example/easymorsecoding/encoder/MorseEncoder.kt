@@ -22,6 +22,8 @@ object MorseEncoder {
         '!' to "-.-.--"
     )
 
+    private val REVERSE_MORSE_MAP = MORSE_MAP.entries.associate { (k, v) -> v to k }
+
     /**
      * Normalizes text (accents, uppercase) and converts it to a human-readable Morse string.
      */
@@ -29,6 +31,33 @@ object MorseEncoder {
         return normalize(text).split(" ").filter { it.isNotEmpty() }.joinToString(" / ") { word ->
             word.mapNotNull { MORSE_MAP[it] }.joinToString(" ")
         }
+    }
+
+    /**
+     * Decodes a Morse string into plain text. 
+     * Uses ' ' as character separator and ' / ' as word separator.
+     * Returns null if any part of the sequence is invalid.
+     */
+    fun decodeFromMorse(morse: String): String? {
+        if (morse.isBlank()) return ""
+        
+        val words = morse.trim().split(" / ")
+        val decodedWords = mutableListOf<String>()
+
+        for (word in words) {
+            val characters = word.trim().split(" ")
+            val decodedChars = StringBuilder()
+            for (char in characters) {
+                if (char.isEmpty()) continue
+                val decoded = REVERSE_MORSE_MAP[char] ?: return null
+                decodedChars.append(decoded)
+            }
+            if (decodedChars.isNotEmpty()) {
+                decodedWords.add(decodedChars.toString())
+            }
+        }
+        
+        return decodedWords.joinToString(" ")
     }
 
     /**

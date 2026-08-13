@@ -110,37 +110,28 @@ fun MorseMessengerApp(
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
             )
 
-            // Morse Translation Display
-            if (uiState.morseDisplay.isNotEmpty()) {
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.surfaceVariant,
-                    shape = MaterialTheme.shapes.medium
-                ) {
-                    Column(modifier = Modifier.padding(12.dp)) {
-                        Text(
-                            text = "Morse Translation:",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(
-                            text = uiState.morseDisplay,
-                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
-                            fontSize = 18.sp,
-                            modifier = Modifier.semantics { contentDescription = "Morse translation of your message" }
-                        )
+            // Morse Input/Display
+            OutlinedTextField(
+                value = uiState.morseDisplay,
+                onValueChange = { viewModel.onMorseChange(it) },
+                label = { Text("Morse Code (. - /)") },
+                modifier = Modifier.fillMaxWidth(),
+                minLines = 2,
+                maxLines = 4,
+                enabled = uiState.playbackState == PlaybackState.IDLE,
+                isError = uiState.isMorseInvalid,
+                supportingText = {
+                    if (uiState.isMorseInvalid) {
+                        Text("Invalid Morse sequence", color = MaterialTheme.colorScheme.error)
+                    } else if (uiState.message.isNotEmpty()) {
+                        Text("Decodes to: ${uiState.message}", style = MaterialTheme.typography.bodySmall)
                     }
-                }
-            } else if (uiState.message.isEmpty()) {
-                Text(
-                    "Enter a message to see the Morse translation",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(vertical = 16.dp)
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email, // Email keyboard often has . and - prominent
+                    imeAction = ImeAction.Done
                 )
-            }
+            )
 
             // Playback Progress
             if (uiState.playbackState == PlaybackState.PLAYING) {

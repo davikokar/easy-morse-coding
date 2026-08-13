@@ -64,10 +64,30 @@ class MorseViewModel(
         _uiState.update { 
             it.copy(
                 message = newMessage,
-                morseDisplay = MorseEncoder.encodeToMorseString(newMessage)
+                morseDisplay = MorseEncoder.encodeToMorseString(newMessage),
+                isMorseInvalid = false
             )
         }
         save("message", newMessage)
+    }
+
+    fun onMorseChange(newMorse: String) {
+        // Filter input to allow only valid Morse characters
+        val filteredMorse = newMorse.filter { it == '.' || it == '-' || it == ' ' || it == '/' }
+        
+        val decodedText = MorseEncoder.decodeFromMorse(filteredMorse)
+        
+        _uiState.update { 
+            it.copy(
+                morseDisplay = filteredMorse,
+                message = decodedText ?: it.message, // Keep old message if invalid, or update to new
+                isMorseInvalid = decodedText == null
+            )
+        }
+        
+        if (decodedText != null) {
+            save("message", decodedText)
+        }
     }
 
     fun onToggleFlashlight(enabled: Boolean) {

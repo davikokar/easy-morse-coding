@@ -50,4 +50,22 @@ class MorseEncoderTest {
         val morse = MorseEncoder.encodeToMorseString("S#S")
         assertEquals("... ...", morse) // # should be ignored
     }
+
+    @Test
+    fun testDecodeSOS() {
+        val text = MorseEncoder.decodeFromMorse("... --- ...")
+        assertEquals("SOS", text)
+    }
+
+    @Test
+    fun testDecodeWithSpaces() {
+        val text = MorseEncoder.decodeFromMorse(".- / -...")
+        assertEquals("A B", text)
+    }
+
+    @Test
+    fun testDecodeInvalid() {
+        val text = MorseEncoder.decodeFromMorse("........")
+        assertEquals(null, text)
+    }
 }

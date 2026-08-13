@@ -5,6 +5,7 @@ import com.example.easymorsecoding.model.MorseSignal
 data class MorseUiState(
     val message: String = "",
     val morseDisplay: String = "",
+    val isMorseInvalid: Boolean = false,
     val useFlashlight: Boolean = false,
     val useSound: Boolean = false,
     val wpm: Int = 15,
