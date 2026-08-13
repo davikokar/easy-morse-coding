@@ -8,7 +8,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -200,9 +199,6 @@ fun MorseMessengerApp(
                     }
                 }
             }
-
-            // Help Section
-            HelpSection()
         }
     }
 
@@ -276,43 +272,6 @@ fun PlaybackProgress(uiState: com.example.easymorsecoding.viewmodel.MorseUiState
                         modifier = Modifier.padding(horizontal = 2.dp)
                     )
                 }
-            }
-        }
-    }
-}
-
-@Composable
-fun HelpSection() {
-    var expanded by remember { mutableStateOf(false) }
-    
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = { expanded = !expanded }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.AutoMirrored.Filled.Help, contentDescription = null)
-                Spacer(Modifier.width(8.dp))
-                Text("Help & Safety", fontWeight = FontWeight.Bold)
-                Spacer(Modifier.weight(1f))
-                Icon(
-                    if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = null
-                )
-            }
-            if (expanded) {
-                Spacer(Modifier.height(16.dp))
-                Text(
-                    "Morse Timing:\n" +
-                    "• Dot: 1 unit\n" +
-                    "• Dash: 3 units\n" +
-                    "• Character Gap: 3 units\n" +
-                    "• Word Gap: 7 units\n\n" +
-                    "Flashlight Safety:\n" +
-                    "The phone's flashlight can become hot with extended use. Use with caution. " +
-                    "Playback will stop automatically if you leave the app.",
-                    style = MaterialTheme.typography.bodyMedium
-                )
             }
         }
     }
