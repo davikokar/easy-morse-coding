@@ -16,9 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +41,24 @@ fun MorseMessengerApp(
     var menuExpanded by remember { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
     var showAbout by remember { mutableStateOf(false) }
+
+    val morseAnnotatedString = buildAnnotatedString {
+        append(uiState.morseDisplay)
+        val currentIndex = uiState.currentSignalIndex
+        if (currentIndex != null && currentIndex in uiState.signalRanges.indices) {
+            val range = uiState.signalRanges[currentIndex]
+            if (range != null && range.first < uiState.morseDisplay.length) {
+                addStyle(
+                    style = SpanStyle(
+                        color = Color.White,
+                        background = Color.Black
+                    ),
+                    start = range.first,
+                    end = (range.last + 1).coerceAtMost(uiState.morseDisplay.length)
+                )
+            }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -112,8 +134,12 @@ fun MorseMessengerApp(
 
             // Morse Input/Display
             OutlinedTextField(
-                value = uiState.morseDisplay,
-                onValueChange = { viewModel.onMorseChange(it) },
+                value = if (uiState.playbackState == PlaybackState.IDLE) {
+                    TextFieldValue(uiState.morseDisplay)
+                } else {
+                    TextFieldValue(morseAnnotatedString)
+                },
+                onValueChange = { viewModel.onMorseChange(it.text) },
                 label = { Text("Morse Code (. - /)") },
                 modifier = Modifier.fillMaxWidth(),
                 minLines = 2,
@@ -233,39 +259,6 @@ fun PlaybackProgress(uiState: com.example.easymorsecoding.viewmodel.MorseUiState
             },
             modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(Modifier.height(8.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            val currentIndex = uiState.currentSignalIndex ?: -1
-            uiState.signals.forEachIndexed { index, signal ->
-                // Only show a window of signals to avoid overcrowding
-                if (index in (currentIndex - 5)..(currentIndex + 5)) {
-                    val color = if (index == currentIndex) {
-                        MaterialTheme.colorScheme.primary
-                    } else if (index < currentIndex) {
-                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    }
-                    
-                    val text = when (signal.isActive) {
-                        true -> if (signal == com.example.easymorsecoding.model.MorseSignal.DOT) "●" else "▬"
-                        false -> " "
-                    }
-                    
-                    Text(
-                        text = text,
-                        color = color,
-                        fontSize = if (index == currentIndex) 24.sp else 18.sp,
-                        fontWeight = if (index == currentIndex) FontWeight.Bold else FontWeight.Normal,
-                        modifier = Modifier.padding(horizontal = 2.dp)
-                    )
-                }
-            }
-        }
     }
 }
 

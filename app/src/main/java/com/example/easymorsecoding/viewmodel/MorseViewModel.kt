@@ -141,10 +141,15 @@ class MorseViewModel(
         if (playbackJob?.isActive == true) return
 
         playbackJob = viewModelScope.launch {
-            val signals = MorseEncoder.encodeToSignals(_uiState.value.message)
+            val (morse, signalsWithRanges) = MorseEncoder.encodeToSignalsWithRanges(_uiState.value.message)
+            val signals = signalsWithRanges.map { it.signal }
+            val ranges = signalsWithRanges.map { it.range }
+            
             _uiState.update { 
                 it.copy(
-                    signals = signals, 
+                    signals = signals,
+                    signalRanges = ranges,
+                    morseDisplay = morse, // Ensure display matches the signals exactly
                     playbackState = PlaybackState.COUNTDOWN,
                     isPaused = false 
                 ) 

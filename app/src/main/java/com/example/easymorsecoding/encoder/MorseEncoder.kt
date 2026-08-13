@@ -60,11 +60,19 @@ object MorseEncoder {
         return decodedWords.joinToString(" ")
     }
 
+    data class SignalWithRange(
+        val signal: MorseSignal,
+        val range: IntRange?
+    )
+
     /**
-     * Converts text to a sequence of MorseSignal objects for playback.
+     * Converts text to a sequence of MorseSignal objects with their corresponding
+     * character ranges in the Morse string representation.
      */
-    fun encodeToSignals(text: String): List<MorseSignal> {
-        val signals = mutableListOf<MorseSignal>()
+    fun encodeToSignalsWithRanges(text: String): Pair<String, List<SignalWithRange>> {
+        val signalsWithRanges = mutableListOf<SignalWithRange>()
+        val morseString = StringBuilder()
+        
         val words = normalize(text).split(" ").filter { it.isNotEmpty() }
 
         words.forEachIndexed { wordIndex, word ->
@@ -72,21 +80,44 @@ object MorseEncoder {
                 val code = MORSE_MAP[char]
                 if (code != null) {
                     code.forEachIndexed { elementIndex, element ->
-                        signals.add(if (element == '.') MorseSignal.DOT else MorseSignal.DASH)
+                        val start = morseString.length
+                        morseString.append(element)
+                        val end = morseString.length
+                        
+                        signalsWithRanges.add(SignalWithRange(
+                            if (element == '.') MorseSignal.DOT else MorseSignal.DASH,
+                            IntRange(start, end - 1)
+                        ))
+                        
                         if (elementIndex < code.length - 1) {
-                            signals.add(MorseSignal.ELEMENT_GAP)
+                            signalsWithRanges.add(SignalWithRange(MorseSignal.ELEMENT_GAP, null))
                         }
                     }
+                    
                     if (charIndex < word.length - 1) {
-                        signals.add(MorseSignal.CHARACTER_GAP)
+                        val start = morseString.length
+                        morseString.append(" ")
+                        val end = morseString.length
+                        signalsWithRanges.add(SignalWithRange(MorseSignal.CHARACTER_GAP, IntRange(start, end - 1)))
                     }
                 }
             }
             if (wordIndex < words.size - 1) {
-                signals.add(MorseSignal.WORD_GAP)
+                val start = morseString.length
+                morseString.append(" / ")
+                val end = morseString.length
+                signalsWithRanges.add(SignalWithRange(MorseSignal.WORD_GAP, IntRange(start, end - 1)))
             }
         }
-        return signals
+        
+        return morseString.toString() to signalsWithRanges
+    }
+
+    /**
+     * Converts text to a sequence of MorseSignal objects for playback.
+     */
+    fun encodeToSignals(text: String): List<MorseSignal> {
+        return encodeToSignalsWithRanges(text).second.map { it.signal }
     }
 
     private fun normalize(text: String): String {

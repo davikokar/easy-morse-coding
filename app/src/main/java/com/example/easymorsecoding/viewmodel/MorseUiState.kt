@@ -19,6 +19,7 @@ data class MorseUiState(
     val currentCountdown: Int? = null,
     val currentSignalIndex: Int? = null,
     val signals: List<MorseSignal> = emptyList(),
+    val signalRanges: List<IntRange?> = emptyList(),
     val hasFlashlight: Boolean = false,
     val flashlightExplanation: String? = null
 )
