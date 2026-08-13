@@ -20,10 +20,13 @@ class MorseViewModel(
 
     private val _uiState = MutableStateFlow(MorseUiState(
         message = savedStateHandle["message"] ?: "",
-        useScreen = savedStateHandle["useScreen"] ?: true,
         useFlashlight = savedStateHandle["useFlashlight"] ?: false,
         useSound = savedStateHandle["useSound"] ?: false,
         wpm = savedStateHandle["wpm"] ?: 15,
+        dotUnits = savedStateHandle["dotUnits"] ?: 1,
+        dashUnits = savedStateHandle["dashUnits"] ?: 3,
+        charGapUnits = savedStateHandle["charGapUnits"] ?: 3,
+        wordGapUnits = savedStateHandle["wordGapUnits"] ?: 7,
         countdownSeconds = savedStateHandle["countdownSeconds"] ?: 0
     ))
     val uiState: StateFlow<MorseUiState> = _uiState.asStateFlow()
@@ -37,8 +40,7 @@ class MorseViewModel(
         flashlightController = flashlightController,
         soundController = soundController,
         isPaused = isPausedFlow,
-        onProgress = { index -> _uiState.update { it.copy(currentSignalIndex = index) } },
-        onScreenOutput = { active -> _uiState.update { it.copy(isScreenActive = active) } }
+        onProgress = { index -> _uiState.update { it.copy(currentSignalIndex = index) } }
     )
 
     private var playbackJob: Job? = null
@@ -68,11 +70,6 @@ class MorseViewModel(
         save("message", newMessage)
     }
 
-    fun onToggleScreen(enabled: Boolean) {
-        _uiState.update { it.copy(useScreen = enabled) }
-        save("useScreen", enabled)
-    }
-
     fun onToggleFlashlight(enabled: Boolean) {
         _uiState.update { it.copy(useFlashlight = enabled) }
         save("useFlashlight", enabled)
@@ -86,6 +83,26 @@ class MorseViewModel(
     fun onWpmChange(newWpm: Int) {
         _uiState.update { it.copy(wpm = newWpm) }
         save("wpm", newWpm)
+    }
+
+    fun onDotUnitsChange(units: Int) {
+        _uiState.update { it.copy(dotUnits = units) }
+        save("dotUnits", units)
+    }
+
+    fun onDashUnitsChange(units: Int) {
+        _uiState.update { it.copy(dashUnits = units) }
+        save("dashUnits", units)
+    }
+
+    fun onCharGapUnitsChange(units: Int) {
+        _uiState.update { it.copy(charGapUnits = units) }
+        save("charGapUnits", units)
+    }
+
+    fun onWordGapUnitsChange(units: Int) {
+        _uiState.update { it.copy(wordGapUnits = units) }
+        save("wordGapUnits", units)
     }
 
     fun onCountdownSecondsChange(seconds: Int) {
@@ -127,7 +144,10 @@ class MorseViewModel(
                 wpm = _uiState.value.wpm,
                 useFlashlight = _uiState.value.useFlashlight,
                 useSound = _uiState.value.useSound,
-                useScreen = _uiState.value.useScreen
+                dotUnits = _uiState.value.dotUnits,
+                dashUnits = _uiState.value.dashUnits,
+                charGapUnits = _uiState.value.charGapUnits,
+                wordGapUnits = _uiState.value.wordGapUnits
             )
 
             _uiState.update { it.copy(playbackState = PlaybackState.IDLE, currentSignalIndex = null, isPaused = false) }
@@ -142,8 +162,7 @@ class MorseViewModel(
                 playbackState = PlaybackState.IDLE,
                 isPaused = false,
                 currentCountdown = null,
-                currentSignalIndex = null,
-                isScreenActive = false
+                currentSignalIndex = null
             )
         }
     }

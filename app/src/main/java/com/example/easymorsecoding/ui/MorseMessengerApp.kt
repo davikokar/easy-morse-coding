@@ -9,13 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Help
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,14 +34,41 @@ fun MorseMessengerApp(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
+    
+    var menuExpanded by remember { mutableStateOf(false) }
+    var showSettings by remember { mutableStateOf(false) }
+    var showAbout by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Morse Messenger") },
                 actions = {
-                    IconButton(onClick = { /* Help dialog handled by HelpSection */ }) {
-                        Icon(Icons.Default.Info, contentDescription = "About Morse Messenger")
+                    Box {
+                        IconButton(onClick = { menuExpanded = true }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = "Menu")
+                        }
+                        DropdownMenu(
+                            expanded = menuExpanded,
+                            onDismissRequest = { menuExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text("Settings") },
+                                onClick = {
+                                    menuExpanded = false
+                                    showSettings = true
+                                },
+                                leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null) }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("About") },
+                                onClick = {
+                                    menuExpanded = false
+                                    showAbout = true
+                                },
+                                leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) }
+                            )
+                        }
                     }
                 }
             )
@@ -62,9 +83,6 @@ fun MorseMessengerApp(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Visual Flash Panel
-            FlashPanel(isActive = uiState.isScreenActive)
-
             // Countdown Display
             if (uiState.playbackState == PlaybackState.COUNTDOWN) {
                 Text(
@@ -182,6 +200,30 @@ fun MorseMessengerApp(
             HelpSection()
         }
     }
+
+    if (showSettings) {
+        SettingsDialog(
+            uiState = uiState,
+            onDotChange = { viewModel.onDotUnitsChange(it) },
+            onDashChange = { viewModel.onDashUnitsChange(it) },
+            onCharGapChange = { viewModel.onCharGapUnitsChange(it) },
+            onWordGapChange = { viewModel.onWordGapUnitsChange(it) },
+            onDismiss = { showSettings = false }
+        )
+    }
+
+    if (showAbout) {
+        AlertDialog(
+            onDismissRequest = { showAbout = false },
+            title = { Text("About Morse Messenger") },
+            text = { Text("A simple app to encode and play Morse code signals using light and sound.\n\nVersion 1.0") },
+            confirmButton = {
+                TextButton(onClick = { showAbout = false }) {
+                    Text("Close")
+                }
+            }
+        )
+    }
 }
 
 @Composable
@@ -217,7 +259,7 @@ fun PlaybackProgress(uiState: com.example.easymorsecoding.viewmodel.MorseUiState
                     }
                     
                     val text = when (signal.isActive) {
-                        true -> if (signal.durationUnits == 1) "●" else "▬"
+                        true -> if (signal == com.example.easymorsecoding.model.MorseSignal.DOT) "●" else "▬"
                         false -> " "
                     }
                     
@@ -272,34 +314,6 @@ fun HelpSection() {
 }
 
 @Composable
-fun FlashPanel(isActive: Boolean) {
-    val backgroundColor by animateColorAsState(
-        targetValue = if (isActive) Color.White else Color.DarkGray,
-        animationSpec = tween(durationMillis = 50), label = ""
-    )
-    
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .background(backgroundColor, MaterialTheme.shapes.medium)
-            .semantics {
-                contentDescription = if (isActive) "Signal Active" else "Signal Inactive"
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        if (isActive) {
-            Icon(
-                Icons.Default.Lightbulb,
-                contentDescription = null,
-                tint = Color.Yellow,
-                modifier = Modifier.size(64.dp)
-            )
-        }
-    }
-}
-
-@Composable
 fun SettingsSection(
     uiState: com.example.easymorsecoding.viewmodel.MorseUiState,
     viewModel: MorseViewModel,
@@ -307,14 +321,6 @@ fun SettingsSection(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text("Outputs", fontWeight = FontWeight.Bold)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = uiState.useScreen,
-                onCheckedChange = { viewModel.onToggleScreen(it) },
-                enabled = uiState.playbackState == PlaybackState.IDLE
-            )
-            Text("Screen Flash")
-        }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(
                 checked = uiState.useFlashlight,
@@ -385,5 +391,57 @@ fun SettingsSection(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SettingsDialog(
+    uiState: com.example.easymorsecoding.viewmodel.MorseUiState,
+    onDotChange: (Int) -> Unit,
+    onDashChange: (Int) -> Unit,
+    onCharGapChange: (Int) -> Unit,
+    onWordGapChange: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Timing Settings") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                TimingSlider(label = "Dot Duration", units = uiState.dotUnits, onValueChange = onDotChange, range = 1f..5f)
+                TimingSlider(label = "Dash Duration", units = uiState.dashUnits, onValueChange = onDashChange, range = 1f..10f)
+                TimingSlider(label = "Character Gap", units = uiState.charGapUnits, onValueChange = onCharGapChange, range = 1f..10f)
+                TimingSlider(label = "Word Gap", units = uiState.wordGapUnits, onValueChange = onWordGapChange, range = 1f..20f)
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Done")
+            }
+        }
+    )
+}
+
+@Composable
+fun TimingSlider(
+    label: String,
+    units: Int,
+    onValueChange: (Int) -> Unit,
+    range: ClosedFloatingPointRange<Float>
+) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(label, style = MaterialTheme.typography.bodyMedium)
+            Text("$units units", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+        }
+        Slider(
+            value = units.toFloat(),
+            onValueChange = { onValueChange(it.toInt()) },
+            valueRange = range,
+            steps = if (range.endInclusive - range.start > 1) (range.endInclusive - range.start).toInt() - 1 else 0
+        )
     }
 }

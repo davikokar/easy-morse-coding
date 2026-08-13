@@ -5,10 +5,13 @@ import com.example.easymorsecoding.model.MorseSignal
 data class MorseUiState(
     val message: String = "",
     val morseDisplay: String = "",
-    val useScreen: Boolean = true,
     val useFlashlight: Boolean = false,
     val useSound: Boolean = false,
     val wpm: Int = 15,
+    val dotUnits: Int = 1,
+    val dashUnits: Int = 3,
+    val charGapUnits: Int = 3,
+    val wordGapUnits: Int = 7,
     val countdownSeconds: Int = 0,
     val playbackState: PlaybackState = PlaybackState.IDLE,
     val isPaused: Boolean = false,
@@ -16,8 +19,7 @@ data class MorseUiState(
     val currentSignalIndex: Int? = null,
     val signals: List<MorseSignal> = emptyList(),
     val hasFlashlight: Boolean = false,
-    val flashlightExplanation: String? = null,
-    val isScreenActive: Boolean = false
+    val flashlightExplanation: String? = null
 )
 
 enum class PlaybackState {

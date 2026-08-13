@@ -30,15 +30,13 @@ class PlaybackControllerTest {
     fun testPlaybackSequence() = runTest {
         val flashlight = MockPlayer()
         val sound = MockPlayer()
-        val screenOutputs = mutableListOf<Boolean>()
         val isPaused = MutableStateFlow(false)
         
         val controller = PlaybackController(
             flashlightController = flashlight,
             soundController = sound,
             isPaused = isPaused,
-            onProgress = {},
-            onScreenOutput = { screenOutputs.add(it) }
+            onProgress = {}
         )
 
         val signals = listOf(MorseSignal.DOT)
@@ -48,12 +46,14 @@ class PlaybackControllerTest {
             wpm = 1200, // 1ms per unit for fast test
             useFlashlight = true,
             useSound = true,
-            useScreen = true
+            dotUnits = 1,
+            dashUnits = 3,
+            charGapUnits = 3,
+            wordGapUnits = 7
         )
 
         // DOT is active, then it turns off in loop, then finally stopAll() calls setOutput(false) again for safety
         assertEquals(listOf(true, false, false), flashlight.outputs)
         assertEquals(listOf(true, false, false), sound.outputs)
-        assertEquals(listOf(true, false, false), screenOutputs)
     }
 }
