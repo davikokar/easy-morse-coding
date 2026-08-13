@@ -2,10 +2,13 @@ package com.example.easymorsecoding.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val GreenPrimary = Color(0xFF22A437)
+val GreenSecondary = Color(0xFF526350)
+val GreenTertiary = Color(0xFF38656A)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val GreenPrimaryDark = Color(0xFF87D796)
+val GreenSecondaryDark = Color(0xFFB9CCB5)
+val GreenTertiaryDark = Color(0xFFA1CED5)
+
+val GreenContainerLight = Color(0xFFA7F0B0)
+val GreenContainerDark = Color(0xFF005318)

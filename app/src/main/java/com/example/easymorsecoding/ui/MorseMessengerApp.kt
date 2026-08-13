@@ -43,6 +43,11 @@ fun MorseMessengerApp(
         topBar = {
             TopAppBar(
                 title = { Text("Morse Messenger") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+                ),
                 actions = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
