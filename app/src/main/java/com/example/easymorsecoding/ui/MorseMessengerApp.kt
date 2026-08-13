@@ -200,6 +200,7 @@ fun MorseMessengerApp(
             onDashChange = { viewModel.onDashUnitsChange(it) },
             onCharGapChange = { viewModel.onCharGapUnitsChange(it) },
             onWordGapChange = { viewModel.onWordGapUnitsChange(it) },
+            onSecondsPerUnitChange = { viewModel.onSecondsPerUnitChange(it) },
             onDismiss = { showSettings = false }
         )
     }
@@ -304,23 +305,6 @@ fun SettingsSection(
 
         HorizontalDivider()
 
-        Text("Timing", fontWeight = FontWeight.Bold)
-        
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Speed (WPM): ${uiState.wpm}")
-            Slider(
-                value = uiState.wpm.toFloat(),
-                onValueChange = { viewModel.onWpmChange(it.toInt()) },
-                valueRange = 5f..30f,
-                steps = 24,
-                enabled = uiState.playbackState == PlaybackState.IDLE,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp)
-                    .semantics { contentDescription = "Playback speed: ${uiState.wpm} words per minute" }
-            )
-        }
-
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Countdown: ")
             val countdownOptions = listOf(0, 3, 5, 10, 30)
@@ -356,13 +340,29 @@ fun SettingsDialog(
     onDashChange: (Int) -> Unit,
     onCharGapChange: (Int) -> Unit,
     onWordGapChange: (Int) -> Unit,
+    onSecondsPerUnitChange: (Float) -> Unit,
     onDismiss: () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Timing Settings") },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            Column(
+                modifier = Modifier.verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Text("Speed", fontWeight = FontWeight.Bold)
+                TimingSliderFloat(
+                    label = "Unit Duration",
+                    value = uiState.secondsPerUnit,
+                    onValueChange = onSecondsPerUnitChange,
+                    range = 0.1f..2.0f,
+                    unitLabel = "s"
+                )
+                
+                HorizontalDivider()
+                
+                Text("Multipliers", fontWeight = FontWeight.Bold)
                 TimingSlider(label = "Dot Duration", units = uiState.dotUnits, onValueChange = onDotChange, range = 1f..5f)
                 TimingSlider(label = "Dash Duration", units = uiState.dashUnits, onValueChange = onDashChange, range = 1f..10f)
                 TimingSlider(label = "Character Gap", units = uiState.charGapUnits, onValueChange = onCharGapChange, range = 1f..10f)
@@ -376,6 +376,31 @@ fun SettingsDialog(
         }
     )
 }
+
+@Composable
+fun TimingSliderFloat(
+    label: String,
+    value: Float,
+    onValueChange: (Float) -> Unit,
+    range: ClosedFloatingPointRange<Float>,
+    unitLabel: String
+) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(label, style = MaterialTheme.typography.bodyMedium)
+            Text("%.2f %s".format(java.util.Locale.US, value, unitLabel), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+        }
+        Slider(
+            value = value,
+            onValueChange = onValueChange,
+            valueRange = range
+        )
+    }
+}
+
 
 @Composable
 fun TimingSlider(

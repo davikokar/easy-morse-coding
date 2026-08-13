@@ -43,7 +43,7 @@ class PlaybackControllerTest {
         
         controller.play(
             signals = signals,
-            wpm = 1200, // 1ms per unit for fast test
+            secondsPerUnit = 0.001f, // 1ms per unit for fast test
             useFlashlight = true,
             useSound = true,
             dotUnits = 1,

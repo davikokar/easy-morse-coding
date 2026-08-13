@@ -22,7 +22,7 @@ class MorseViewModel(
         message = savedStateHandle["message"] ?: "",
         useFlashlight = savedStateHandle["useFlashlight"] ?: false,
         useSound = savedStateHandle["useSound"] ?: false,
-        wpm = savedStateHandle["wpm"] ?: 15,
+        secondsPerUnit = savedStateHandle["secondsPerUnit"] ?: 0.5f,
         dotUnits = savedStateHandle["dotUnits"] ?: 1,
         dashUnits = savedStateHandle["dashUnits"] ?: 3,
         charGapUnits = savedStateHandle["charGapUnits"] ?: 3,
@@ -100,9 +100,9 @@ class MorseViewModel(
         save("useSound", enabled)
     }
 
-    fun onWpmChange(newWpm: Int) {
-        _uiState.update { it.copy(wpm = newWpm) }
-        save("wpm", newWpm)
+    fun onSecondsPerUnitChange(seconds: Float) {
+        _uiState.update { it.copy(secondsPerUnit = seconds) }
+        save("secondsPerUnit", seconds)
     }
 
     fun onDotUnitsChange(units: Int) {
@@ -161,7 +161,7 @@ class MorseViewModel(
 
             playbackController.play(
                 signals = signals,
-                wpm = _uiState.value.wpm,
+                secondsPerUnit = _uiState.value.secondsPerUnit,
                 useFlashlight = _uiState.value.useFlashlight,
                 useSound = _uiState.value.useSound,
                 dotUnits = _uiState.value.dotUnits,

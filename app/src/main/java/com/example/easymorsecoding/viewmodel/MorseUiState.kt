@@ -8,7 +8,7 @@ data class MorseUiState(
     val isMorseInvalid: Boolean = false,
     val useFlashlight: Boolean = false,
     val useSound: Boolean = false,
-    val wpm: Int = 15,
+    val secondsPerUnit: Float = 0.5f,
     val dotUnits: Int = 1,
     val dashUnits: Int = 3,
     val charGapUnits: Int = 3,

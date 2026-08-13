@@ -18,7 +18,7 @@ class PlaybackController(
      */
     suspend fun play(
         signals: List<MorseSignal>,
-        wpm: Int,
+        secondsPerUnit: Float,
         useFlashlight: Boolean,
         useSound: Boolean,
         dotUnits: Int,
@@ -26,7 +26,7 @@ class PlaybackController(
         charGapUnits: Int,
         wordGapUnits: Int
     ) {
-        val unitDurationMs = (1200 / wpm).toLong()
+        val unitDurationMs = (secondsPerUnit * 1000).toLong()
 
         try {
             signals.forEachIndexed { index, signal ->
