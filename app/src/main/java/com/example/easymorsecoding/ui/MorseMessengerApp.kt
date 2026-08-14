@@ -36,7 +36,6 @@ fun MorseMessengerApp(
     onRequestPermission: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val scrollState = rememberScrollState()
     
     var menuExpanded by remember { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
@@ -104,7 +103,6 @@ fun MorseMessengerApp(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .verticalScroll(scrollState)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -125,9 +123,10 @@ fun MorseMessengerApp(
                 value = uiState.message,
                 onValueChange = { viewModel.onMessageChange(it) },
                 label = { Text("Message to Encode") },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
                 minLines = 3,
-                maxLines = 5,
                 enabled = uiState.playbackState == PlaybackState.IDLE,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
             )
@@ -141,9 +140,10 @@ fun MorseMessengerApp(
                 },
                 onValueChange = { viewModel.onMorseChange(it.text) },
                 label = { Text("Morse Code (. - /)") },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
                 minLines = 2,
-                maxLines = 4,
                 enabled = uiState.playbackState == PlaybackState.IDLE,
                 isError = uiState.isMorseInvalid,
                 supportingText = {
