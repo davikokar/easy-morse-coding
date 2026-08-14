@@ -18,6 +18,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -40,6 +41,19 @@ fun MorseMessengerApp(
     var menuExpanded by remember { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
     var showAbout by remember { mutableStateOf(false) }
+
+    // Local state for Morse input to handle cursor position correctly
+    var morseTextFieldValue by remember { mutableStateOf(TextFieldValue(uiState.morseDisplay)) }
+
+    // Sync from ViewModel to local state (e.g. when Message area changes)
+    LaunchedEffect(uiState.morseDisplay) {
+        if (morseTextFieldValue.text != uiState.morseDisplay) {
+            morseTextFieldValue = TextFieldValue(
+                text = uiState.morseDisplay,
+                selection = TextRange(uiState.morseDisplay.length)
+            )
+        }
+    }
 
     val morseAnnotatedString = buildAnnotatedString {
         append(uiState.morseDisplay)
@@ -134,11 +148,16 @@ fun MorseMessengerApp(
             // Morse Input/Display
             OutlinedTextField(
                 value = if (uiState.playbackState == PlaybackState.IDLE) {
-                    TextFieldValue(uiState.morseDisplay)
+                    morseTextFieldValue
                 } else {
                     TextFieldValue(morseAnnotatedString)
                 },
-                onValueChange = { viewModel.onMorseChange(it.text) },
+                onValueChange = { 
+                    if (uiState.playbackState == PlaybackState.IDLE) {
+                        morseTextFieldValue = it
+                        viewModel.onMorseChange(it.text) 
+                    }
+                },
                 label = { Text("Morse Code (. - /)") },
                 modifier = Modifier
                     .fillMaxWidth()
