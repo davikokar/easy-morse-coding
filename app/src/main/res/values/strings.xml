@@ -1,3 +1,38 @@
 <resources>
-    <string name="app_name">Easy Morse Coding</string>
+    <string name="app_name" translatable="false">Easy Morse Coding</string>
+    <string name="menu">Menu</string>
+    <string name="settings">Settings</string>
+    <string name="about">About</string>
+    <string name="countdown_description">Countdown: %1$d</string>
+    <string name="message_to_encode">Message to Encode</string>
+    <string name="morse_code_label">Morse Code (. - /)</string>
+    <string name="invalid_morse_sequence">Invalid Morse sequence</string>
+    <string name="decodes_to">Decodes to: %1$s</string>
+    <string name="play">Play</string>
+    <string name="resume">Resume</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stop</string>
+    <string name="about_title">About Morse Messenger</string>
+    <string name="about_message">A simple app to encode and play Morse code signals using light and sound.\n\nVersion 1.0</string>
+    <string name="close">Close</string>
+    <string name="outputs">Outputs</string>
+    <string name="phone_flashlight">Phone Flashlight</string>
+    <string name="not_available"> (Not Available)</string>
+    <string name="no_flashlight_available">No flashlight available on this device</string>
+    <string name="sound">Sound</string>
+    <string name="countdown">Countdown:</string>
+    <string name="seconds_short">%1$ds</string>
+    <string name="repeat">Repeat</string>
+    <string name="timing_settings">Timing Settings</string>
+    <string name="speed">Speed</string>
+    <string name="unit_duration">Unit Duration</string>
+    <string name="duration_seconds">%1$.2f s</string>
+    <string name="multipliers">Multipliers</string>
+    <string name="dot_duration">Dot Duration</string>
+    <string name="dash_duration">Dash Duration</string>
+    <string name="character_gap">Character Gap</string>
+    <string name="word_gap">Word Gap</string>
+    <string name="repeat_gap">Repeat Gap</string>
+    <string name="done">Done</string>
+    <string name="unit_count">%1$d units</string>
 </resources>

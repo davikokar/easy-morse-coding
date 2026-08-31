@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.example.easymorsecoding.R
 import com.example.easymorsecoding.encoder.MorseEncoder
 import com.example.easymorsecoding.playback.FlashlightController
 import com.example.easymorsecoding.playback.PlaybackController
@@ -52,7 +53,7 @@ class MorseViewModel(
         _uiState.update {
             it.copy(
                 hasFlashlight = hasFlash,
-                flashlightExplanation = if (!hasFlash) "No flashlight available on this device" else null,
+                flashlightExplanation = if (!hasFlash) application.getString(R.string.no_flashlight_available) else null,
                 morseDisplay = MorseEncoder.encodeToMorseString(it.message)
             )
         }

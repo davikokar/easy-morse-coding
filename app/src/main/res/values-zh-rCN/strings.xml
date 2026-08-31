@@ -1,0 +1,37 @@
+<resources>
+    <string name="menu">菜单</string>
+    <string name="settings">设置</string>
+    <string name="about">关于</string>
+    <string name="countdown_description">倒计时：%1$d</string>
+    <string name="message_to_encode">要编码的消息</string>
+    <string name="morse_code_label">摩尔斯电码 (. - /)</string>
+    <string name="invalid_morse_sequence">无效的摩尔斯电码序列</string>
+    <string name="decodes_to">解码为：%1$s</string>
+    <string name="play">播放</string>
+    <string name="resume">继续</string>
+    <string name="pause">暂停</string>
+    <string name="stop">停止</string>
+    <string name="about_title">关于 Morse Messenger</string>
+    <string name="about_message">一个使用灯光和声音编码及播放摩尔斯电码信号的简单应用。\n\n版本 1.0</string>
+    <string name="close">关闭</string>
+    <string name="outputs">输出</string>
+    <string name="phone_flashlight">手机手电筒</string>
+    <string name="not_available">（不可用）</string>
+    <string name="no_flashlight_available">此设备没有可用的手电筒</string>
+    <string name="sound">声音</string>
+    <string name="countdown">倒计时：</string>
+    <string name="seconds_short">%1$d秒</string>
+    <string name="repeat">重复</string>
+    <string name="timing_settings">计时设置</string>
+    <string name="speed">速度</string>
+    <string name="unit_duration">单位时长</string>
+    <string name="duration_seconds">%1$.2f秒</string>
+    <string name="multipliers">倍数</string>
+    <string name="dot_duration">点时长</string>
+    <string name="dash_duration">划时长</string>
+    <string name="character_gap">字符间隔</string>
+    <string name="word_gap">单词间隔</string>
+    <string name="repeat_gap">重复间隔</string>
+    <string name="done">完成</string>
+    <string name="unit_count">%1$d个单位</string>
+</resources>

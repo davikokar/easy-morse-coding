@@ -1,0 +1,37 @@
+<resources>
+    <string name="menu">Menú</string>
+    <string name="settings">Ajustes</string>
+    <string name="about">Acerca de</string>
+    <string name="countdown_description">Cuenta atrás: %1$d</string>
+    <string name="message_to_encode">Mensaje para codificar</string>
+    <string name="morse_code_label">Código Morse (. - /)</string>
+    <string name="invalid_morse_sequence">Secuencia Morse no válida</string>
+    <string name="decodes_to">Se decodifica como: %1$s</string>
+    <string name="play">Reproducir</string>
+    <string name="resume">Reanudar</string>
+    <string name="pause">Pausar</string>
+    <string name="stop">Detener</string>
+    <string name="about_title">Acerca de Morse Messenger</string>
+    <string name="about_message">Una aplicación sencilla para codificar y reproducir señales Morse mediante luz y sonido.\n\nVersión 1.0</string>
+    <string name="close">Cerrar</string>
+    <string name="outputs">Salidas</string>
+    <string name="phone_flashlight">Linterna del teléfono</string>
+    <string name="not_available"> (No disponible)</string>
+    <string name="no_flashlight_available">Este dispositivo no dispone de linterna</string>
+    <string name="sound">Sonido</string>
+    <string name="countdown">Cuenta atrás:</string>
+    <string name="seconds_short">%1$d s</string>
+    <string name="repeat">Repetir</string>
+    <string name="timing_settings">Ajustes de tiempo</string>
+    <string name="speed">Velocidad</string>
+    <string name="unit_duration">Duración de la unidad</string>
+    <string name="duration_seconds">%1$.2f s</string>
+    <string name="multipliers">Multiplicadores</string>
+    <string name="dot_duration">Duración del punto</string>
+    <string name="dash_duration">Duración de la raya</string>
+    <string name="character_gap">Espacio entre caracteres</string>
+    <string name="word_gap">Espacio entre palabras</string>
+    <string name="repeat_gap">Espacio entre repeticiones</string>
+    <string name="done">Listo</string>
+    <string name="unit_count">%1$d unidades</string>
+</resources>

@@ -1,0 +1,37 @@
+<resources>
+    <string name="menu">القائمة</string>
+    <string name="settings">الإعدادات</string>
+    <string name="about">حول</string>
+    <string name="countdown_description">العد التنازلي: %1$d</string>
+    <string name="message_to_encode">الرسالة المراد ترميزها</string>
+    <string name="morse_code_label">شفرة مورس (. - /)</string>
+    <string name="invalid_morse_sequence">تسلسل مورس غير صالح</string>
+    <string name="decodes_to">فك الترميز إلى: %1$s</string>
+    <string name="play">تشغيل</string>
+    <string name="resume">استئناف</string>
+    <string name="pause">إيقاف مؤقت</string>
+    <string name="stop">إيقاف</string>
+    <string name="about_title">حول Morse Messenger</string>
+    <string name="about_message">تطبيق بسيط لترميز إشارات مورس وتشغيلها باستخدام الضوء والصوت.\n\nالإصدار 1.0</string>
+    <string name="close">إغلاق</string>
+    <string name="outputs">المخرجات</string>
+    <string name="phone_flashlight">مصباح الهاتف</string>
+    <string name="not_available"> (غير متاح)</string>
+    <string name="no_flashlight_available">لا يتوفر مصباح على هذا الجهاز</string>
+    <string name="sound">الصوت</string>
+    <string name="countdown">العد التنازلي:</string>
+    <string name="seconds_short">%1$d ث</string>
+    <string name="repeat">تكرار</string>
+    <string name="timing_settings">إعدادات التوقيت</string>
+    <string name="speed">السرعة</string>
+    <string name="unit_duration">مدة الوحدة</string>
+    <string name="duration_seconds">%1$.2f ث</string>
+    <string name="multipliers">المضاعفات</string>
+    <string name="dot_duration">مدة النقطة</string>
+    <string name="dash_duration">مدة الشرطة</string>
+    <string name="character_gap">فاصل الأحرف</string>
+    <string name="word_gap">فاصل الكلمات</string>
+    <string name="repeat_gap">فاصل التكرار</string>
+    <string name="done">تم</string>
+    <string name="unit_count">%1$d وحدة</string>
+</resources>

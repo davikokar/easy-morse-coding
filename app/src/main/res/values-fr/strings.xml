@@ -1,0 +1,37 @@
+<resources>
+    <string name="menu">Menu</string>
+    <string name="settings">Paramètres</string>
+    <string name="about">À propos</string>
+    <string name="countdown_description">Compte à rebours : %1$d</string>
+    <string name="message_to_encode">Message à encoder</string>
+    <string name="morse_code_label">Code Morse (. - /)</string>
+    <string name="invalid_morse_sequence">Séquence Morse non valide</string>
+    <string name="decodes_to">Se décode en : %1$s</string>
+    <string name="play">Lire</string>
+    <string name="resume">Reprendre</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Arrêter</string>
+    <string name="about_title">À propos de Morse Messenger</string>
+    <string name="about_message">Une application simple pour encoder et lire des signaux Morse avec la lumière et le son.\n\nVersion 1.0</string>
+    <string name="close">Fermer</string>
+    <string name="outputs">Sorties</string>
+    <string name="phone_flashlight">Lampe torche du téléphone</string>
+    <string name="not_available"> (Non disponible)</string>
+    <string name="no_flashlight_available">Aucune lampe torche disponible sur cet appareil</string>
+    <string name="sound">Son</string>
+    <string name="countdown">Compte à rebours :</string>
+    <string name="seconds_short">%1$d s</string>
+    <string name="repeat">Répéter</string>
+    <string name="timing_settings">Paramètres de temporisation</string>
+    <string name="speed">Vitesse</string>
+    <string name="unit_duration">Durée de l’unité</string>
+    <string name="duration_seconds">%1$.2f s</string>
+    <string name="multipliers">Multiplicateurs</string>
+    <string name="dot_duration">Durée du point</string>
+    <string name="dash_duration">Durée du tiret</string>
+    <string name="character_gap">Espacement des caractères</string>
+    <string name="word_gap">Espacement des mots</string>
+    <string name="repeat_gap">Intervalle de répétition</string>
+    <string name="done">Terminé</string>
+    <string name="unit_count">%1$d unités</string>
+</resources>

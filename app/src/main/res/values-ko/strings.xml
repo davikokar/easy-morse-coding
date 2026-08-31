@@ -1,0 +1,37 @@
+<resources>
+    <string name="menu">메뉴</string>
+    <string name="settings">설정</string>
+    <string name="about">정보</string>
+    <string name="countdown_description">카운트다운: %1$d</string>
+    <string name="message_to_encode">인코딩할 메시지</string>
+    <string name="morse_code_label">모스 부호 (. - /)</string>
+    <string name="invalid_morse_sequence">잘못된 모스 부호입니다</string>
+    <string name="decodes_to">디코딩 결과: %1$s</string>
+    <string name="play">재생</string>
+    <string name="resume">계속</string>
+    <string name="pause">일시중지</string>
+    <string name="stop">정지</string>
+    <string name="about_title">Morse Messenger 정보</string>
+    <string name="about_message">빛과 소리를 사용해 모스 부호 신호를 인코딩하고 재생하는 간단한 앱입니다.\n\n버전 1.0</string>
+    <string name="close">닫기</string>
+    <string name="outputs">출력</string>
+    <string name="phone_flashlight">휴대전화 손전등</string>
+    <string name="not_available"> (사용할 수 없음)</string>
+    <string name="no_flashlight_available">이 기기에서는 손전등을 사용할 수 없습니다</string>
+    <string name="sound">소리</string>
+    <string name="countdown">카운트다운:</string>
+    <string name="seconds_short">%1$d초</string>
+    <string name="repeat">반복</string>
+    <string name="timing_settings">타이밍 설정</string>
+    <string name="speed">속도</string>
+    <string name="unit_duration">단위 시간</string>
+    <string name="duration_seconds">%1$.2f초</string>
+    <string name="multipliers">배수</string>
+    <string name="dot_duration">점 길이</string>
+    <string name="dash_duration">선 길이</string>
+    <string name="character_gap">문자 간격</string>
+    <string name="word_gap">단어 간격</string>
+    <string name="repeat_gap">반복 간격</string>
+    <string name="done">완료</string>
+    <string name="unit_count">%1$d단위</string>
+</resources>

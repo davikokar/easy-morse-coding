@@ -1,0 +1,37 @@
+<resources>
+    <string name="menu">Menü</string>
+    <string name="settings">Einstellungen</string>
+    <string name="about">Info</string>
+    <string name="countdown_description">Countdown: %1$d</string>
+    <string name="message_to_encode">Zu codierende Nachricht</string>
+    <string name="morse_code_label">Morsecode (. - /)</string>
+    <string name="invalid_morse_sequence">Ungültige Morsefolge</string>
+    <string name="decodes_to">Decodiert zu: %1$s</string>
+    <string name="play">Abspielen</string>
+    <string name="resume">Fortsetzen</string>
+    <string name="pause">Pause</string>
+    <string name="stop">Stopp</string>
+    <string name="about_title">Über Morse Messenger</string>
+    <string name="about_message">Eine einfache App zum Codieren und Abspielen von Morsezeichen mit Licht und Ton.\n\nVersion 1.0</string>
+    <string name="close">Schließen</string>
+    <string name="outputs">Ausgaben</string>
+    <string name="phone_flashlight">Handy-Taschenlampe</string>
+    <string name="not_available"> (Nicht verfügbar)</string>
+    <string name="no_flashlight_available">Auf diesem Gerät ist keine Taschenlampe verfügbar</string>
+    <string name="sound">Ton</string>
+    <string name="countdown">Countdown:</string>
+    <string name="seconds_short">%1$d s</string>
+    <string name="repeat">Wiederholen</string>
+    <string name="timing_settings">Zeiteinstellungen</string>
+    <string name="speed">Geschwindigkeit</string>
+    <string name="unit_duration">Einheitsdauer</string>
+    <string name="duration_seconds">%1$.2f s</string>
+    <string name="multipliers">Multiplikatoren</string>
+    <string name="dot_duration">Punktdauer</string>
+    <string name="dash_duration">Strichdauer</string>
+    <string name="character_gap">Zeichenabstand</string>
+    <string name="word_gap">Wortabstand</string>
+    <string name="repeat_gap">Wiederholungsabstand</string>
+    <string name="done">Fertig</string>
+    <string name="unit_count">%1$d Einheiten</string>
+</resources>

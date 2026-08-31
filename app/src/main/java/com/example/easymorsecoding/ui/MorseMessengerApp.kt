@@ -27,6 +27,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import com.example.easymorsecoding.R
 import com.example.easymorsecoding.viewmodel.MorseViewModel
 import com.example.easymorsecoding.viewmodel.PlaybackState
 
@@ -85,14 +87,14 @@ fun MorseMessengerApp(
                 actions = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = "Menu")
+                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.menu))
                         }
                         DropdownMenu(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text("Settings") },
+                                text = { Text(stringResource(R.string.settings)) },
                                 onClick = {
                                     menuExpanded = false
                                     showSettings = true
@@ -100,7 +102,7 @@ fun MorseMessengerApp(
                                 leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null) }
                             )
                             DropdownMenuItem(
-                                text = { Text("About") },
+                                text = { Text(stringResource(R.string.about)) },
                                 onClick = {
                                     menuExpanded = false
                                     showAbout = true
@@ -123,12 +125,13 @@ fun MorseMessengerApp(
         ) {
             // Countdown Display
             if (uiState.playbackState == PlaybackState.COUNTDOWN) {
+                val countdownDescription = stringResource(R.string.countdown_description, uiState.currentCountdown ?: 0)
                 Text(
                     text = uiState.currentCountdown?.toString() ?: "",
                     fontSize = 64.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.semantics { contentDescription = "Countdown: ${uiState.currentCountdown}" }
+                    modifier = Modifier.semantics { contentDescription = countdownDescription }
                 )
             }
 
@@ -136,7 +139,7 @@ fun MorseMessengerApp(
             OutlinedTextField(
                 value = uiState.message,
                 onValueChange = { viewModel.onMessageChange(it) },
-                label = { Text("Message to Encode") },
+                label = { Text(stringResource(R.string.message_to_encode)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
@@ -158,7 +161,7 @@ fun MorseMessengerApp(
                         viewModel.onMorseChange(it.text) 
                     }
                 },
-                label = { Text("Morse Code (. - /)") },
+                label = { Text(stringResource(R.string.morse_code_label)) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
@@ -167,9 +170,9 @@ fun MorseMessengerApp(
                 isError = uiState.isMorseInvalid,
                 supportingText = {
                     if (uiState.isMorseInvalid) {
-                        Text("Invalid Morse sequence", color = MaterialTheme.colorScheme.error)
+                        Text(stringResource(R.string.invalid_morse_sequence), color = MaterialTheme.colorScheme.error)
                     } else if (uiState.message.isNotEmpty()) {
-                        Text("Decodes to: ${uiState.message}", style = MaterialTheme.typography.bodySmall)
+                        Text(stringResource(R.string.decodes_to, uiState.message), style = MaterialTheme.typography.bodySmall)
                     }
                 },
                 keyboardOptions = KeyboardOptions(
@@ -203,7 +206,7 @@ fun MorseMessengerApp(
                     ) {
                         Icon(Icons.Default.PlayArrow, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Play")
+                        Text(stringResource(R.string.play))
                     }
                 } else {
                     if (uiState.playbackState == PlaybackState.PLAYING) {
@@ -220,7 +223,7 @@ fun MorseMessengerApp(
                                 contentDescription = null
                             )
                             Spacer(Modifier.width(8.dp))
-                            Text(if (uiState.isPaused) "Resume" else "Pause")
+                            Text(stringResource(if (uiState.isPaused) R.string.resume else R.string.pause))
                         }
                     }
                     
@@ -231,7 +234,7 @@ fun MorseMessengerApp(
                     ) {
                         Icon(Icons.Default.Stop, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Stop")
+                        Text(stringResource(R.string.stop))
                     }
                 }
             }
@@ -254,11 +257,11 @@ fun MorseMessengerApp(
     if (showAbout) {
         AlertDialog(
             onDismissRequest = { showAbout = false },
-            title = { Text("About Morse Messenger") },
-            text = { Text("A simple app to encode and play Morse code signals using light and sound.\n\nVersion 1.0") },
+            title = { Text(stringResource(R.string.about_title)) },
+            text = { Text(stringResource(R.string.about_message)) },
             confirmButton = {
                 TextButton(onClick = { showAbout = false }) {
-                    Text("Close")
+                    Text(stringResource(R.string.close))
                 }
             }
         )
@@ -289,7 +292,7 @@ fun SettingsSection(
     onRequestPermission: () -> Unit
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Outputs", fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.outputs), fontWeight = FontWeight.Bold)
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(
                 checked = uiState.useFlashlight,
@@ -298,10 +301,10 @@ fun SettingsSection(
                 },
                 enabled = uiState.playbackState == PlaybackState.IDLE && uiState.hasFlashlight
             )
-            Text("Phone Flashlight")
+            Text(stringResource(R.string.phone_flashlight))
             if (!uiState.hasFlashlight) {
                 Text(
-                    " (Not Available)",
+                    stringResource(R.string.not_available),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error
                 )
@@ -313,7 +316,7 @@ fun SettingsSection(
                 onCheckedChange = { viewModel.onToggleSound(it) },
                 enabled = uiState.playbackState == PlaybackState.IDLE
             )
-            Text("Sound")
+            Text(stringResource(R.string.sound))
         }
 
         HorizontalDivider()
@@ -322,7 +325,7 @@ fun SettingsSection(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Countdown: ")
+            Text(stringResource(R.string.countdown))
             val countdownOptions = listOf(0, 3, 5, 10, 30)
             var expanded by remember { mutableStateOf(false) }
             
@@ -331,12 +334,12 @@ fun SettingsSection(
                     onClick = { expanded = true },
                     enabled = uiState.playbackState == PlaybackState.IDLE
                 ) {
-                    Text("${uiState.countdownSeconds}s")
+                    Text(stringResource(R.string.seconds_short, uiState.countdownSeconds))
                 }
                 DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     countdownOptions.forEach { seconds ->
                         DropdownMenuItem(
-                            text = { Text("${seconds}s") },
+                            text = { Text(stringResource(R.string.seconds_short, seconds)) },
                             onClick = {
                                 viewModel.onCountdownSecondsChange(seconds)
                                 expanded = false
@@ -352,7 +355,7 @@ fun SettingsSection(
                 onCheckedChange = { viewModel.onRepeatChange(it) },
                 enabled = uiState.playbackState == PlaybackState.IDLE
             )
-            Text("Repeat")
+            Text(stringResource(R.string.repeat))
         }
     }
 }
@@ -370,34 +373,33 @@ fun SettingsDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Timing Settings") },
+        title = { Text(stringResource(R.string.timing_settings)) },
         text = {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text("Speed", fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.speed), fontWeight = FontWeight.Bold)
                 TimingSliderFloat(
-                    label = "Unit Duration",
+                    label = stringResource(R.string.unit_duration),
                     value = uiState.secondsPerUnit,
                     onValueChange = onSecondsPerUnitChange,
-                    range = 0.1f..2.0f,
-                    unitLabel = "s"
+                    range = 0.1f..2.0f
                 )
                 
                 HorizontalDivider()
                 
-                Text("Multipliers", fontWeight = FontWeight.Bold)
-                TimingSlider(label = "Dot Duration", units = uiState.dotUnits, onValueChange = onDotChange, range = 1f..5f)
-                TimingSlider(label = "Dash Duration", units = uiState.dashUnits, onValueChange = onDashChange, range = 1f..10f)
-                TimingSlider(label = "Character Gap", units = uiState.charGapUnits, onValueChange = onCharGapChange, range = 1f..10f)
-                TimingSlider(label = "Word Gap", units = uiState.wordGapUnits, onValueChange = onWordGapChange, range = 1f..20f)
-                TimingSlider(label = "Repeat Gap", units = uiState.repeatGapUnits, onValueChange = onRepeatGapChange, range = 1f..30f)
+                Text(stringResource(R.string.multipliers), fontWeight = FontWeight.Bold)
+                TimingSlider(label = stringResource(R.string.dot_duration), units = uiState.dotUnits, onValueChange = onDotChange, range = 1f..5f)
+                TimingSlider(label = stringResource(R.string.dash_duration), units = uiState.dashUnits, onValueChange = onDashChange, range = 1f..10f)
+                TimingSlider(label = stringResource(R.string.character_gap), units = uiState.charGapUnits, onValueChange = onCharGapChange, range = 1f..10f)
+                TimingSlider(label = stringResource(R.string.word_gap), units = uiState.wordGapUnits, onValueChange = onWordGapChange, range = 1f..20f)
+                TimingSlider(label = stringResource(R.string.repeat_gap), units = uiState.repeatGapUnits, onValueChange = onRepeatGapChange, range = 1f..30f)
             }
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("Done")
+                Text(stringResource(R.string.done))
             }
         }
     )
@@ -408,8 +410,7 @@ fun TimingSliderFloat(
     label: String,
     value: Float,
     onValueChange: (Float) -> Unit,
-    range: ClosedFloatingPointRange<Float>,
-    unitLabel: String
+    range: ClosedFloatingPointRange<Float>
 ) {
     Column {
         Row(
@@ -417,7 +418,7 @@ fun TimingSliderFloat(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(label, style = MaterialTheme.typography.bodyMedium)
-            Text("%.2f %s".format(java.util.Locale.US, value, unitLabel), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+            Text(stringResource(R.string.duration_seconds, value), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
         }
         Slider(
             value = value,
@@ -441,7 +442,7 @@ fun TimingSlider(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(label, style = MaterialTheme.typography.bodyMedium)
-            Text("$units units", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+            Text(stringResource(R.string.unit_count, units), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
         }
         Slider(
             value = units.toFloat(),
