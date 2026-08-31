@@ -1,7 +1,6 @@
 <resources>
     <string name="menu">Menú</string>
     <string name="settings">Ajustes</string>
-    <string name="about">Acerca de</string>
     <string name="countdown_description">Cuenta atrás: %1$d</string>
     <string name="message_to_encode">Mensaje para codificar</string>
     <string name="morse_code_label">Código Morse (. - /)</string>
@@ -11,8 +10,7 @@
     <string name="resume">Reanudar</string>
     <string name="pause">Pausar</string>
     <string name="stop">Detener</string>
-    <string name="about_title">Acerca de Morse Messenger</string>
-    <string name="about_message">Una aplicación sencilla para codificar y reproducir señales Morse mediante luz y sonido.\n\nVersión 1.0</string>
+    <string name="about_message">Una aplicación sencilla para codificar y reproducir señales Morse mediante luz y sonido.</string>
     <string name="close">Cerrar</string>
     <string name="outputs">Salidas</string>
     <string name="phone_flashlight">Linterna del teléfono</string>
@@ -34,4 +32,30 @@
     <string name="repeat_gap">Espacio entre repeticiones</string>
     <string name="done">Listo</string>
     <string name="unit_count">%1$d unidades</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_general">General</string>
+    <string name="settings_change_language">Cambiar idioma</string>
+    <string name="settings_timings">Tiempos</string>
+    <string name="language_system_default">Predeterminado del sistema</string>
+    <string name="action_ok">Aceptar</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="back">Atrás</string>
+    <string name="settings_app">Aplicación</string>
+    <string name="settings_share_app">Compartir aplicación</string>
+    <string name="share_app_text">Descubre Easy Morse Coding: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_rate_app">Valorar aplicación</string>
+    <string name="settings_customer_support">Atención al cliente</string>
+    <string name="support_email_subject">Solicitud de asistencia de Easy Morse Coding</string>
+    <string name="error_no_email_app">No se encontró ninguna aplicación de correo</string>
+    <string name="settings_about">Acerca de</string>
+    <string name="about_version">Versión %1$s</string>
+    <string name="settings_community_support">Comunidad y soporte</string>
+    <string name="settings_buy_coffee">Invítame a un café</string>
+    <string name="billing_thanks">¡Muchas gracias por tu apoyo!</string>
+    <string name="billing_unavailable">Esta compra no está disponible ahora</string>
+    <string name="settings_legal">Información legal</string>
+    <string name="settings_privacy">Política de privacidad</string>
+    <string name="settings_terms">Términos</string>
+    <string name="privacy_policy_text">Easy Morse Coding procesa el texto del mensaje solo en tu dispositivo para convertirlo a código Morse y desde él. La aplicación no recopila, almacena ni comparte datos personales. El permiso de cámara solo se utiliza para controlar la linterna durante la reproducción.</string>
+    <string name="terms_text">Easy Morse Coding se proporciona tal cual para uso personal. La reproducción Morse no debe utilizarse para comunicaciones de emergencia. Eres responsable de usar las funciones de linterna y sonido de forma segura y legal.</string>
 </resources>

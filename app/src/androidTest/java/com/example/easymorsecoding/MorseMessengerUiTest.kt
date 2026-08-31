@@ -1,6 +1,7 @@
 package com.example.easymorsecoding
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -40,5 +41,28 @@ class MorseMessengerUiTest {
         
         // Verify Play button appears again
         composeTestRule.onNodeWithText("Play").assertExists()
+    }
+
+    @Test
+    fun settingsScreenShowsOrganizedSections() {
+        composeTestRule.onNodeWithContentDescription("Menu").performClick()
+        composeTestRule.onNodeWithText("Settings").performClick()
+
+        listOf("General", "App", "Community & support", "Legal").forEach { section ->
+            composeTestRule.onNodeWithText(section).assertExists()
+        }
+        listOf(
+            "Change language",
+            "Timings",
+            "Share app",
+            "Rate app",
+            "Customer support",
+            "About",
+            "Buy me a coffee",
+            "Privacy policy",
+            "Terms"
+        ).forEach { item ->
+            composeTestRule.onNodeWithText(item).assertExists()
+        }
     }
 }

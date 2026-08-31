@@ -1,7 +1,6 @@
 <resources>
     <string name="menu">메뉴</string>
     <string name="settings">설정</string>
-    <string name="about">정보</string>
     <string name="countdown_description">카운트다운: %1$d</string>
     <string name="message_to_encode">인코딩할 메시지</string>
     <string name="morse_code_label">모스 부호 (. - /)</string>
@@ -11,8 +10,7 @@
     <string name="resume">계속</string>
     <string name="pause">일시중지</string>
     <string name="stop">정지</string>
-    <string name="about_title">Morse Messenger 정보</string>
-    <string name="about_message">빛과 소리를 사용해 모스 부호 신호를 인코딩하고 재생하는 간단한 앱입니다.\n\n버전 1.0</string>
+    <string name="about_message">빛과 소리를 사용해 모스 부호 신호를 인코딩하고 재생하는 간단한 앱입니다.</string>
     <string name="close">닫기</string>
     <string name="outputs">출력</string>
     <string name="phone_flashlight">휴대전화 손전등</string>
@@ -34,4 +32,30 @@
     <string name="repeat_gap">반복 간격</string>
     <string name="done">완료</string>
     <string name="unit_count">%1$d단위</string>
+    <string name="settings_title">설정</string>
+    <string name="settings_general">일반</string>
+    <string name="settings_change_language">언어 변경</string>
+    <string name="settings_timings">타이밍</string>
+    <string name="language_system_default">시스템 기본값</string>
+    <string name="action_ok">확인</string>
+    <string name="action_cancel">취소</string>
+    <string name="back">뒤로</string>
+    <string name="settings_app">앱</string>
+    <string name="settings_share_app">앱 공유</string>
+    <string name="share_app_text">Easy Morse Coding을 확인해 보세요: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_rate_app">앱 평가</string>
+    <string name="settings_customer_support">고객 지원</string>
+    <string name="support_email_subject">Easy Morse Coding 지원 요청</string>
+    <string name="error_no_email_app">이메일 앱을 찾을 수 없습니다</string>
+    <string name="settings_about">정보</string>
+    <string name="about_version">버전 %1$s</string>
+    <string name="settings_community_support">커뮤니티 및 지원</string>
+    <string name="settings_buy_coffee">커피 한 잔 사주기</string>
+    <string name="billing_thanks">지원해 주셔서 정말 감사합니다!</string>
+    <string name="billing_unavailable">현재 이 구매를 이용할 수 없습니다</string>
+    <string name="settings_legal">법적 정보</string>
+    <string name="settings_privacy">개인정보 처리방침</string>
+    <string name="settings_terms">이용약관</string>
+    <string name="privacy_policy_text">Easy Morse Coding은 모스 부호로 변환하고 해독하기 위해 메시지 텍스트를 기기에서만 처리합니다. 앱은 개인 데이터를 수집, 저장 또는 공유하지 않습니다. 카메라 권한은 재생 중 손전등을 제어하는 용도로만 사용됩니다.</string>
+    <string name="terms_text">Easy Morse Coding은 개인 용도로 있는 그대로 제공됩니다. 모스 재생을 긴급 통신에 의존해서는 안 됩니다. 손전등과 소리 기능을 안전하고 합법적으로 사용할 책임은 사용자에게 있습니다.</string>
 </resources>

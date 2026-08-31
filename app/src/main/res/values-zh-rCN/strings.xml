@@ -1,7 +1,6 @@
 <resources>
     <string name="menu">菜单</string>
     <string name="settings">设置</string>
-    <string name="about">关于</string>
     <string name="countdown_description">倒计时：%1$d</string>
     <string name="message_to_encode">要编码的消息</string>
     <string name="morse_code_label">摩尔斯电码 (. - /)</string>
@@ -11,8 +10,7 @@
     <string name="resume">继续</string>
     <string name="pause">暂停</string>
     <string name="stop">停止</string>
-    <string name="about_title">关于 Morse Messenger</string>
-    <string name="about_message">一个使用灯光和声音编码及播放摩尔斯电码信号的简单应用。\n\n版本 1.0</string>
+    <string name="about_message">一个使用灯光和声音编码及播放摩尔斯电码信号的简单应用。</string>
     <string name="close">关闭</string>
     <string name="outputs">输出</string>
     <string name="phone_flashlight">手机手电筒</string>
@@ -34,4 +32,30 @@
     <string name="repeat_gap">重复间隔</string>
     <string name="done">完成</string>
     <string name="unit_count">%1$d个单位</string>
+    <string name="settings_title">设置</string>
+    <string name="settings_general">常规</string>
+    <string name="settings_change_language">更改语言</string>
+    <string name="settings_timings">计时</string>
+    <string name="language_system_default">系统默认</string>
+    <string name="action_ok">确定</string>
+    <string name="action_cancel">取消</string>
+    <string name="back">返回</string>
+    <string name="settings_app">应用</string>
+    <string name="settings_share_app">分享应用</string>
+    <string name="share_app_text">试试 Easy Morse Coding：https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_rate_app">评价应用</string>
+    <string name="settings_customer_support">客户支持</string>
+    <string name="support_email_subject">Easy Morse Coding 支持请求</string>
+    <string name="error_no_email_app">未找到电子邮件应用</string>
+    <string name="settings_about">关于</string>
+    <string name="about_version">版本 %1$s</string>
+    <string name="settings_community_support">社区与支持</string>
+    <string name="settings_buy_coffee">请我喝杯咖啡</string>
+    <string name="billing_thanks">非常感谢您的支持！</string>
+    <string name="billing_unavailable">目前无法进行此购买</string>
+    <string name="settings_legal">法律信息</string>
+    <string name="settings_privacy">隐私政策</string>
+    <string name="settings_terms">条款</string>
+    <string name="privacy_policy_text">Easy Morse Coding 仅在您的设备上处理消息文本，以便在文本与摩尔斯电码之间进行转换。本应用不会收集、存储或分享个人数据。相机权限仅用于在播放时控制手电筒。</string>
+    <string name="terms_text">Easy Morse Coding 按现状提供，仅供个人使用。请勿依赖摩尔斯电码播放进行紧急通信。您有责任以安全且合法的方式使用手电筒和声音功能。</string>
 </resources>

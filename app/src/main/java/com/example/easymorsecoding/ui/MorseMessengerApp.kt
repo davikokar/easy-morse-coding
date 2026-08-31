@@ -1,13 +1,16 @@
 package com.example.easymorsecoding.ui
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -28,21 +31,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
+import com.example.easymorsecoding.LocaleHelper
 import com.example.easymorsecoding.R
 import com.example.easymorsecoding.viewmodel.MorseViewModel
 import com.example.easymorsecoding.viewmodel.PlaybackState
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MorseMessengerApp(
     viewModel: MorseViewModel,
     onRequestPermission: () -> Unit,
+    onLanguageSelected: (String) -> Unit,
+    onShareApp: () -> Unit,
+    onRateApp: () -> Unit,
+    onCustomerSupport: () -> Unit,
+    onBuyCoffee: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     
     var menuExpanded by remember { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
-    var showAbout by remember { mutableStateOf(false) }
 
     // Local state for Morse input to handle cursor position correctly
     var morseTextFieldValue by remember { mutableStateOf(TextFieldValue(uiState.morseDisplay)) }
@@ -75,6 +84,20 @@ fun MorseMessengerApp(
         }
     }
 
+    if (showSettings) {
+        SettingsScreen(
+            uiState = uiState,
+            viewModel = viewModel,
+            onBack = { showSettings = false },
+            onLanguageSelected = onLanguageSelected,
+            onShareApp = onShareApp,
+            onRateApp = onRateApp,
+            onCustomerSupport = onCustomerSupport,
+            onBuyCoffee = onBuyCoffee
+        )
+        return
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -100,14 +123,6 @@ fun MorseMessengerApp(
                                     showSettings = true
                                 },
                                 leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null) }
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.about)) },
-                                onClick = {
-                                    menuExpanded = false
-                                    showAbout = true
-                                },
-                                leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) }
                             )
                         }
                     }
@@ -241,31 +256,203 @@ fun MorseMessengerApp(
         }
     }
 
-    if (showSettings) {
-        SettingsDialog(
-            uiState = uiState,
-            onDotChange = { viewModel.onDotUnitsChange(it) },
-            onDashChange = { viewModel.onDashUnitsChange(it) },
-            onCharGapChange = { viewModel.onCharGapUnitsChange(it) },
-            onWordGapChange = { viewModel.onWordGapUnitsChange(it) },
-            onRepeatGapChange = { viewModel.onRepeatGapUnitsChange(it) },
-            onSecondsPerUnitChange = { viewModel.onSecondsPerUnitChange(it) },
-            onDismiss = { showSettings = false }
-        )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SettingsScreen(
+    uiState: com.example.easymorsecoding.viewmodel.MorseUiState,
+    viewModel: MorseViewModel,
+    onBack: () -> Unit,
+    onLanguageSelected: (String) -> Unit,
+    onShareApp: () -> Unit,
+    onRateApp: () -> Unit,
+    onCustomerSupport: () -> Unit,
+    onBuyCoffee: () -> Unit
+) {
+    var dialog by remember { mutableStateOf<SettingsDialogType?>(null) }
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val versionName = remember(context) {
+        context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty()
     }
 
-    if (showAbout) {
-        AlertDialog(
-            onDismissRequest = { showAbout = false },
-            title = { Text(stringResource(R.string.about_title)) },
-            text = { Text(stringResource(R.string.about_message)) },
-            confirmButton = {
-                TextButton(onClick = { showAbout = false }) {
-                    Text(stringResource(R.string.close))
+    BackHandler(onBack = onBack)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.settings_title)) },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            SettingsSectionHeader(stringResource(R.string.settings_general))
+            SettingsRow(Icons.Default.Language, stringResource(R.string.settings_change_language)) {
+                dialog = SettingsDialogType.LANGUAGE
+            }
+            SettingsRow(Icons.Default.Schedule, stringResource(R.string.settings_timings)) {
+                dialog = SettingsDialogType.TIMINGS
+            }
+            HorizontalDivider()
+
+            SettingsSectionHeader(stringResource(R.string.settings_app))
+            SettingsRow(Icons.Default.Share, stringResource(R.string.settings_share_app), onShareApp)
+            SettingsRow(Icons.Default.Star, stringResource(R.string.settings_rate_app), onRateApp)
+            SettingsRow(Icons.Default.SupportAgent, stringResource(R.string.settings_customer_support), onCustomerSupport)
+            SettingsRow(Icons.Default.Info, stringResource(R.string.settings_about)) {
+                dialog = SettingsDialogType.ABOUT
+            }
+            HorizontalDivider()
+
+            SettingsSectionHeader(stringResource(R.string.settings_community_support))
+            SettingsRow(Icons.Default.Coffee, stringResource(R.string.settings_buy_coffee), onBuyCoffee)
+            HorizontalDivider()
+
+            SettingsSectionHeader(stringResource(R.string.settings_legal))
+            SettingsRow(Icons.Default.PrivacyTip, stringResource(R.string.settings_privacy)) {
+                dialog = SettingsDialogType.PRIVACY
+            }
+            SettingsRow(Icons.Default.Description, stringResource(R.string.settings_terms)) {
+                dialog = SettingsDialogType.TERMS
+            }
+        }
+    }
+
+    when (dialog) {
+        SettingsDialogType.LANGUAGE -> LanguageDialog(
+            onLanguageSelected = onLanguageSelected,
+            onDismiss = { dialog = null }
+        )
+        SettingsDialogType.TIMINGS -> SettingsDialog(
+            uiState = uiState,
+            onDotChange = viewModel::onDotUnitsChange,
+            onDashChange = viewModel::onDashUnitsChange,
+            onCharGapChange = viewModel::onCharGapUnitsChange,
+            onWordGapChange = viewModel::onWordGapUnitsChange,
+            onRepeatGapChange = viewModel::onRepeatGapUnitsChange,
+            onSecondsPerUnitChange = viewModel::onSecondsPerUnitChange,
+            onDismiss = { dialog = null }
+        )
+        SettingsDialogType.ABOUT -> InformationDialog(
+            title = stringResource(R.string.settings_about),
+            message = stringResource(R.string.about_message) + "\n\n" +
+                stringResource(R.string.about_version, versionName),
+            onDismiss = { dialog = null }
+        )
+        SettingsDialogType.PRIVACY -> InformationDialog(
+            title = stringResource(R.string.settings_privacy),
+            message = stringResource(R.string.privacy_policy_text),
+            onDismiss = { dialog = null }
+        )
+        SettingsDialogType.TERMS -> InformationDialog(
+            title = stringResource(R.string.settings_terms),
+            message = stringResource(R.string.terms_text),
+            onDismiss = { dialog = null }
+        )
+        null -> Unit
+    }
+}
+
+private enum class SettingsDialogType { LANGUAGE, TIMINGS, ABOUT, PRIVACY, TERMS }
+
+@Composable
+private fun SettingsSectionHeader(title: String) {
+    Text(
+        text = title,
+        modifier = Modifier.padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 8.dp),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.primary,
+        fontWeight = FontWeight.Bold
+    )
+}
+
+@Composable
+private fun SettingsRow(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .heightIn(min = 56.dp)
+            .padding(horizontal = 24.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Spacer(Modifier.width(20.dp))
+        Text(label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
+        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+@Composable
+private fun LanguageDialog(onLanguageSelected: (String) -> Unit, onDismiss: () -> Unit) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val tags = remember { listOf("") + LocaleHelper.supportedLanguageTags }
+    var selectedTag by remember { mutableStateOf(LocaleHelper.getPersistedLanguageTag(context)) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.settings_change_language)) },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                tags.forEach { tag ->
+                    val label = if (tag.isEmpty()) {
+                        stringResource(R.string.language_system_default)
+                    } else {
+                        val locale = Locale.forLanguageTag(tag)
+                        locale.getDisplayName(locale).replaceFirstChar { it.uppercase(locale) }
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { selectedTag = tag }
+                            .padding(vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RadioButton(selected = selectedTag == tag, onClick = { selectedTag = tag })
+                        Text(label)
+                    }
                 }
             }
-        )
-    }
+        },
+        confirmButton = {
+            TextButton(onClick = { onLanguageSelected(selectedTag) }) {
+                Text(stringResource(R.string.action_ok))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
+        }
+    )
+}
+
+@Composable
+private fun InformationDialog(title: String, message: String, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = { Text(message) },
+        confirmButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.close)) }
+        }
+    )
 }
 
 @Composable

@@ -1,7 +1,6 @@
 <resources>
     <string name="menu">القائمة</string>
     <string name="settings">الإعدادات</string>
-    <string name="about">حول</string>
     <string name="countdown_description">العد التنازلي: %1$d</string>
     <string name="message_to_encode">الرسالة المراد ترميزها</string>
     <string name="morse_code_label">شفرة مورس (. - /)</string>
@@ -11,8 +10,7 @@
     <string name="resume">استئناف</string>
     <string name="pause">إيقاف مؤقت</string>
     <string name="stop">إيقاف</string>
-    <string name="about_title">حول Morse Messenger</string>
-    <string name="about_message">تطبيق بسيط لترميز إشارات مورس وتشغيلها باستخدام الضوء والصوت.\n\nالإصدار 1.0</string>
+    <string name="about_message">تطبيق بسيط لترميز إشارات مورس وتشغيلها باستخدام الضوء والصوت.</string>
     <string name="close">إغلاق</string>
     <string name="outputs">المخرجات</string>
     <string name="phone_flashlight">مصباح الهاتف</string>
@@ -34,4 +32,30 @@
     <string name="repeat_gap">فاصل التكرار</string>
     <string name="done">تم</string>
     <string name="unit_count">%1$d وحدة</string>
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_general">عام</string>
+    <string name="settings_change_language">تغيير اللغة</string>
+    <string name="settings_timings">التوقيتات</string>
+    <string name="language_system_default">لغة النظام الافتراضية</string>
+    <string name="action_ok">موافق</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="back">رجوع</string>
+    <string name="settings_app">التطبيق</string>
+    <string name="settings_share_app">مشاركة التطبيق</string>
+    <string name="share_app_text">جرّب Easy Morse Coding: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_rate_app">تقييم التطبيق</string>
+    <string name="settings_customer_support">دعم العملاء</string>
+    <string name="support_email_subject">طلب دعم Easy Morse Coding</string>
+    <string name="error_no_email_app">لم يتم العثور على تطبيق بريد إلكتروني</string>
+    <string name="settings_about">حول</string>
+    <string name="about_version">الإصدار %1$s</string>
+    <string name="settings_community_support">المجتمع والدعم</string>
+    <string name="settings_buy_coffee">اشترِ لي قهوة</string>
+    <string name="billing_thanks">شكرًا جزيلًا لدعمك!</string>
+    <string name="billing_unavailable">عملية الشراء هذه غير متاحة الآن</string>
+    <string name="settings_legal">قانوني</string>
+    <string name="settings_privacy">سياسة الخصوصية</string>
+    <string name="settings_terms">الشروط</string>
+    <string name="privacy_policy_text">يعالج Easy Morse Coding نص الرسالة على جهازك فقط لتحويله من شفرة مورس وإليها. لا يجمع التطبيق البيانات الشخصية أو يخزنها أو يشاركها. يُستخدم إذن الكاميرا فقط للتحكم في المصباح أثناء التشغيل.</string>
+    <string name="terms_text">يُقدم Easy Morse Coding كما هو للاستخدام الشخصي. يجب عدم الاعتماد على تشغيل مورس لاتصالات الطوارئ. أنت مسؤول عن استخدام ميزتي المصباح والصوت بأمان وبشكل قانوني.</string>
 </resources>

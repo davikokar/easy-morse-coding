@@ -1,7 +1,6 @@
 <resources>
     <string name="menu">メニュー</string>
     <string name="settings">設定</string>
-    <string name="about">アプリについて</string>
     <string name="countdown_description">カウントダウン: %1$d</string>
     <string name="message_to_encode">符号化するメッセージ</string>
     <string name="morse_code_label">モールス符号 (. - /)</string>
@@ -11,8 +10,7 @@
     <string name="resume">再開</string>
     <string name="pause">一時停止</string>
     <string name="stop">停止</string>
-    <string name="about_title">Morse Messenger について</string>
-    <string name="about_message">光と音を使ってモールス信号を符号化し、再生するシンプルなアプリです。\n\nバージョン 1.0</string>
+    <string name="about_message">光と音を使ってモールス信号を符号化し、再生するシンプルなアプリです。</string>
     <string name="close">閉じる</string>
     <string name="outputs">出力</string>
     <string name="phone_flashlight">スマートフォンのライト</string>
@@ -34,4 +32,30 @@
     <string name="repeat_gap">リピート間隔</string>
     <string name="done">完了</string>
     <string name="unit_count">%1$d単位</string>
+    <string name="settings_title">設定</string>
+    <string name="settings_general">一般</string>
+    <string name="settings_change_language">言語を変更</string>
+    <string name="settings_timings">タイミング</string>
+    <string name="language_system_default">システムのデフォルト</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">キャンセル</string>
+    <string name="back">戻る</string>
+    <string name="settings_app">アプリ</string>
+    <string name="settings_share_app">アプリを共有</string>
+    <string name="share_app_text">Easy Morse Coding をお試しください: https://play.google.com/store/apps/details?id=%1$s</string>
+    <string name="settings_rate_app">アプリを評価</string>
+    <string name="settings_customer_support">カスタマーサポート</string>
+    <string name="support_email_subject">Easy Morse Coding サポート依頼</string>
+    <string name="error_no_email_app">メールアプリが見つかりません</string>
+    <string name="settings_about">アプリについて</string>
+    <string name="about_version">バージョン %1$s</string>
+    <string name="settings_community_support">コミュニティとサポート</string>
+    <string name="settings_buy_coffee">コーヒーをおごる</string>
+    <string name="billing_thanks">ご支援いただきありがとうございます！</string>
+    <string name="billing_unavailable">現在この購入は利用できません</string>
+    <string name="settings_legal">法的情報</string>
+    <string name="settings_privacy">プライバシーポリシー</string>
+    <string name="settings_terms">利用規約</string>
+    <string name="privacy_policy_text">Easy Morse Coding は、モールス符号への変換と復号のために、メッセージのテキストを端末上でのみ処理します。個人データの収集、保存、共有は行いません。カメラの権限は、再生中にライトを制御するためにのみ使用されます。</string>
+    <string name="terms_text">Easy Morse Coding は個人利用向けに現状のまま提供されます。モールス再生を緊急時の通信に使用しないでください。ライトとサウンド機能は、安全かつ合法的に使用する責任があります。</string>
 </resources>
