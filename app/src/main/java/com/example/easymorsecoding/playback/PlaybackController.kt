@@ -24,40 +24,49 @@ class PlaybackController(
         dotUnits: Int,
         dashUnits: Int,
         charGapUnits: Int,
-        wordGapUnits: Int
+        wordGapUnits: Int,
+        repeat: Boolean = false,
+        repeatGapUnits: Int = 14
     ) {
         val unitDurationMs = (secondsPerUnit * 1000).toLong()
 
         try {
-            signals.forEachIndexed { index, signal ->
-                if (!coroutineContext.isActive) return@forEachIndexed
+            do {
+                signals.forEachIndexed { index, signal ->
+                    if (!coroutineContext.isActive) return@forEachIndexed
 
-                // Handle Pause
-                if (isPaused.value) {
+                    // Handle Pause
+                    if (isPaused.value) {
+                        stopOutputs(useFlashlight, useSound)
+                        isPaused.first { !it } // Wait until unpaused
+                    }
+
+                    onProgress(index)
+
+                    val isActive = signal.isActive
+                    if (isActive) {
+                        if (useFlashlight) flashlightController.setOutput(true)
+                        if (useSound) soundController.setOutput(true)
+                    }
+
+                    val durationUnits = when (signal) {
+                        MorseSignal.DOT -> dotUnits
+                        MorseSignal.DASH -> dashUnits
+                        MorseSignal.ELEMENT_GAP -> 1 // Internal element gap is always 1 unit by convention
+                        MorseSignal.CHARACTER_GAP -> charGapUnits
+                        MorseSignal.WORD_GAP -> wordGapUnits
+                    }
+
+                    delay(durationUnits * unitDurationMs)
+
                     stopOutputs(useFlashlight, useSound)
-                    isPaused.first { !it } // Wait until unpaused
                 }
 
-                onProgress(index)
-
-                val isActive = signal.isActive
-                if (isActive) {
-                    if (useFlashlight) flashlightController.setOutput(true)
-                    if (useSound) soundController.setOutput(true)
+                if (repeat && coroutineContext.isActive) {
+                    onProgress(null)
+                    delay(repeatGapUnits * unitDurationMs)
                 }
-
-                val durationUnits = when (signal) {
-                    MorseSignal.DOT -> dotUnits
-                    MorseSignal.DASH -> dashUnits
-                    MorseSignal.ELEMENT_GAP -> 1 // Internal element gap is always 1 unit by convention
-                    MorseSignal.CHARACTER_GAP -> charGapUnits
-                    MorseSignal.WORD_GAP -> wordGapUnits
-                }
-
-                delay(durationUnits * unitDurationMs)
-
-                stopOutputs(useFlashlight, useSound)
-            }
+            } while (repeat && coroutineContext.isActive)
         } finally {
             stopAll()
         }

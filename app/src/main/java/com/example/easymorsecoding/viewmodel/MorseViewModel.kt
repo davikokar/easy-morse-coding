@@ -27,7 +27,9 @@ class MorseViewModel(
         dashUnits = savedStateHandle["dashUnits"] ?: 3,
         charGapUnits = savedStateHandle["charGapUnits"] ?: 3,
         wordGapUnits = savedStateHandle["wordGapUnits"] ?: 7,
-        countdownSeconds = savedStateHandle["countdownSeconds"] ?: 0
+        countdownSeconds = savedStateHandle["countdownSeconds"] ?: 0,
+        repeatEnabled = savedStateHandle["repeatEnabled"] ?: false,
+        repeatGapUnits = savedStateHandle["repeatGapUnits"] ?: 14
     ))
     val uiState: StateFlow<MorseUiState> = _uiState.asStateFlow()
 
@@ -130,6 +132,16 @@ class MorseViewModel(
         save("countdownSeconds", seconds)
     }
 
+    fun onRepeatChange(enabled: Boolean) {
+        _uiState.update { it.copy(repeatEnabled = enabled) }
+        save("repeatEnabled", enabled)
+    }
+
+    fun onRepeatGapUnitsChange(units: Int) {
+        _uiState.update { it.copy(repeatGapUnits = units) }
+        save("repeatGapUnits", units)
+    }
+
     fun togglePause() {
         if (uiState.value.playbackState == PlaybackState.PLAYING) {
             _uiState.update { it.copy(isPaused = !it.isPaused) }
@@ -172,7 +184,9 @@ class MorseViewModel(
                 dotUnits = _uiState.value.dotUnits,
                 dashUnits = _uiState.value.dashUnits,
                 charGapUnits = _uiState.value.charGapUnits,
-                wordGapUnits = _uiState.value.wordGapUnits
+                wordGapUnits = _uiState.value.wordGapUnits,
+                repeat = _uiState.value.repeatEnabled,
+                repeatGapUnits = _uiState.value.repeatGapUnits
             )
 
             _uiState.update { it.copy(playbackState = PlaybackState.IDLE, currentSignalIndex = null, isPaused = false) }

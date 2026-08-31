@@ -14,6 +14,8 @@ data class MorseUiState(
     val charGapUnits: Int = 3,
     val wordGapUnits: Int = 7,
     val countdownSeconds: Int = 0,
+    val repeatEnabled: Boolean = false,
+    val repeatGapUnits: Int = 14,
     val playbackState: PlaybackState = PlaybackState.IDLE,
     val isPaused: Boolean = false,
     val currentCountdown: Int? = null,

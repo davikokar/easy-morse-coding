@@ -245,6 +245,7 @@ fun MorseMessengerApp(
             onDashChange = { viewModel.onDashUnitsChange(it) },
             onCharGapChange = { viewModel.onCharGapUnitsChange(it) },
             onWordGapChange = { viewModel.onWordGapUnitsChange(it) },
+            onRepeatGapChange = { viewModel.onRepeatGapUnitsChange(it) },
             onSecondsPerUnitChange = { viewModel.onSecondsPerUnitChange(it) },
             onDismiss = { showSettings = false }
         )
@@ -317,7 +318,10 @@ fun SettingsSection(
 
         HorizontalDivider()
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text("Countdown: ")
             val countdownOptions = listOf(0, 3, 5, 10, 30)
             var expanded by remember { mutableStateOf(false) }
@@ -341,6 +345,14 @@ fun SettingsSection(
                     }
                 }
             }
+
+            Spacer(Modifier.weight(1f))
+            Checkbox(
+                checked = uiState.repeatEnabled,
+                onCheckedChange = { viewModel.onRepeatChange(it) },
+                enabled = uiState.playbackState == PlaybackState.IDLE
+            )
+            Text("Repeat")
         }
     }
 }
@@ -352,6 +364,7 @@ fun SettingsDialog(
     onDashChange: (Int) -> Unit,
     onCharGapChange: (Int) -> Unit,
     onWordGapChange: (Int) -> Unit,
+    onRepeatGapChange: (Int) -> Unit,
     onSecondsPerUnitChange: (Float) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -379,6 +392,7 @@ fun SettingsDialog(
                 TimingSlider(label = "Dash Duration", units = uiState.dashUnits, onValueChange = onDashChange, range = 1f..10f)
                 TimingSlider(label = "Character Gap", units = uiState.charGapUnits, onValueChange = onCharGapChange, range = 1f..10f)
                 TimingSlider(label = "Word Gap", units = uiState.wordGapUnits, onValueChange = onWordGapChange, range = 1f..20f)
+                TimingSlider(label = "Repeat Gap", units = uiState.repeatGapUnits, onValueChange = onRepeatGapChange, range = 1f..30f)
             }
         },
         confirmButton = {
