@@ -75,13 +75,7 @@ fun MorseMessengerApp(
                 onRequestPermission = onRequestPermission
             )
 
-            if (uiState.playbackState == PlaybackState.PLAYING) {
-                RfOutputMeter(uiState = uiState)
-            }
-
             TransportBay(uiState = uiState, viewModel = viewModel)
-
-            MorseKeyDrawer()
         }
     }
 }

@@ -13,7 +13,7 @@
     <string name="about_message">Eine einfache App zum Codieren und Abspielen von Morsezeichen mit Licht und Ton.</string>
     <string name="close">Schließen</string>
     <string name="outputs">Ausgaben</string>
-    <string name="phone_flashlight">Handy-Taschenlampe</string>
+    <string name="phone_flashlight">Taschenlampe</string>
     <string name="not_available"> (Nicht verfügbar)</string>
     <string name="no_flashlight_available">Auf diesem Gerät ist keine Taschenlampe verfügbar</string>
     <string name="sound">Ton</string>

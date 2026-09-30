@@ -162,7 +162,7 @@ fun StatusLamp(
     size: Dp = 10.dp
 ) {
     val lensColor by animateColorAsState(
-        targetValue = if (lit) color else color.copy(alpha = 0.18f).overChassis(),
+        targetValue = if (lit) color else color.copy(alpha = 0.38f).overChassis(),
         animationSpec = tween(150),
         label = "lamp"
     )

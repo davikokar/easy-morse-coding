@@ -13,7 +13,7 @@
     <string name="about_message">Une application simple pour encoder et lire des signaux Morse avec la lumière et le son.</string>
     <string name="close">Fermer</string>
     <string name="outputs">Sorties</string>
-    <string name="phone_flashlight">Lampe torche du téléphone</string>
+    <string name="phone_flashlight">Lampe torche</string>
     <string name="not_available"> (Non disponible)</string>
     <string name="no_flashlight_available">Aucune lampe torche disponible sur cet appareil</string>
     <string name="sound">Son</string>

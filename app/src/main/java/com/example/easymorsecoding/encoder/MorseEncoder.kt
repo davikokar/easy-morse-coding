@@ -24,9 +24,6 @@ object MorseEncoder {
 
     private val REVERSE_MORSE_MAP = MORSE_MAP.entries.associate { (k, v) -> v to k }
 
-    /** International Morse code key, in display order, for the on-screen reference. */
-    val referenceTable: List<Pair<Char, String>> = MORSE_MAP.map { it.key to it.value }
-
     /**
      * Normalizes text (accents, uppercase) and converts it to a human-readable Morse string.
      */

@@ -1,27 +1,20 @@
 package com.example.easymorsecoding.ui
 
-import android.content.ClipData
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SettingsInputAntenna
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,18 +24,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ClipEntry
-import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
@@ -53,14 +44,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.easymorsecoding.R
-import com.example.easymorsecoding.encoder.MorseEncoder
 import com.example.easymorsecoding.ui.components.ChassisPanel
 import com.example.easymorsecoding.ui.components.MechanicalButton
 import com.example.easymorsecoding.ui.components.PanelLabel
 import com.example.easymorsecoding.ui.components.StatusLamp
 import com.example.easymorsecoding.ui.components.ToggleBracket
 import com.example.easymorsecoding.ui.components.chassisBevel
-import com.example.easymorsecoding.ui.components.illuminate
 import com.example.easymorsecoding.ui.components.recessedWell
 import com.example.easymorsecoding.ui.theme.ChassisGlass
 import com.example.easymorsecoding.ui.theme.ChassisRecess
@@ -68,70 +57,53 @@ import com.example.easymorsecoding.ui.theme.HazardRed
 import com.example.easymorsecoding.viewmodel.MorseUiState
 import com.example.easymorsecoding.viewmodel.MorseViewModel
 import com.example.easymorsecoding.viewmodel.PlaybackState
-import kotlinx.coroutines.launch
 
 internal val CountdownOptions = listOf(0, 3, 5, 10, 30)
 
-/** Front-panel masthead: equipment designation plus the PWR / TX / RX lamp cluster. */
+/** Front-panel masthead; the lamp cluster doubles as the settings entry point. */
 @Composable
 internal fun StationHeader(uiState: MorseUiState, onOpenSettings: () -> Unit) {
     val transmitting = uiState.playbackState == PlaybackState.PLAYING && !uiState.isPaused
     val idle = uiState.playbackState == PlaybackState.IDLE
+    val settingsLabel = stringResource(R.string.settings)
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surfaceContainerLowest)
+            .statusBarsPadding()
             .chassisBevel()
-            .padding(horizontal = 14.dp, vertical = 12.dp),
+            .padding(start = 14.dp, end = 6.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             imageVector = Icons.Default.SettingsInputAntenna,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(16.dp)
         )
-        Spacer(Modifier.width(10.dp))
+        Spacer(Modifier.width(8.dp))
         Text(
             text = stringResource(R.string.station_title),
-            style = MaterialTheme.typography.headlineLarge,
+            style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.weight(1f)
         )
 
         Column(
             modifier = Modifier
-                .background(ChassisRecess)
-                .chassisBevel()
-                .padding(horizontal = 8.dp, vertical = 6.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+                .clickable(onClick = onOpenSettings)
+                .semantics {
+                    role = Role.Button
+                    contentDescription = settingsLabel
+                }
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
-            IndicatorRow(R.string.indicator_pwr, MaterialTheme.colorScheme.tertiaryContainer, true)
-            IndicatorRow(R.string.indicator_tx, HazardRed, transmitting)
-            IndicatorRow(R.string.indicator_rx, MaterialTheme.colorScheme.primaryContainer, idle)
+            StatusLamp(MaterialTheme.colorScheme.tertiaryContainer, lit = true, size = 6.dp)
+            StatusLamp(HazardRed, lit = transmitting, size = 6.dp)
+            StatusLamp(MaterialTheme.colorScheme.primaryContainer, lit = idle, size = 6.dp)
         }
-
-        IconButton(onClick = onOpenSettings) {
-            Icon(
-                Icons.Default.Settings,
-                contentDescription = stringResource(R.string.settings),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-private fun IndicatorRow(labelRes: Int, color: Color, lit: Boolean) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            text = stringResource(labelRes),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(Modifier.width(6.dp))
-        StatusLamp(color = color, lit = lit, size = 8.dp)
     }
 }
 
@@ -164,8 +136,6 @@ internal fun CountdownBay(seconds: Int) {
 /** Message entry well plus the phosphor-green Morse readout. */
 @Composable
 internal fun TransmitBay(uiState: MorseUiState, viewModel: MorseViewModel) {
-    val clipboard = LocalClipboard.current
-    val scope = rememberCoroutineScope()
     val idle = uiState.playbackState == PlaybackState.IDLE
     val amber = MaterialTheme.colorScheme.primaryContainer
     val phosphor = MaterialTheme.colorScheme.tertiaryContainer
@@ -197,50 +167,12 @@ internal fun TransmitBay(uiState: MorseUiState, viewModel: MorseViewModel) {
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 88.dp)
+                    .height(88.dp)
                     .semantics { contentDescription = messageLabel }
             )
         }
 
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            MechanicalButton(
-                onClick = { viewModel.onMessageChange("") },
-                enabled = idle && uiState.message.isNotEmpty(),
-                minHeight = 32.dp,
-                horizontalPadding = 12.dp
-            ) {
-                Icon(Icons.Default.Clear, null, Modifier.size(14.dp))
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = stringResource(R.string.action_clear),
-                    style = MaterialTheme.typography.labelLarge
-                )
-            }
-        }
-
-        Spacer(Modifier.height(2.dp))
-
-        PanelLabel(text = morseLabel, lampColor = phosphor) {
-            MechanicalButton(
-                onClick = {
-                    scope.launch {
-                        clipboard.setClipEntry(
-                            ClipEntry(ClipData.newPlainText(morseLabel, uiState.morseDisplay))
-                        )
-                    }
-                },
-                enabled = uiState.morseDisplay.isNotEmpty(),
-                minHeight = 30.dp,
-                horizontalPadding = 10.dp
-            ) {
-                Icon(Icons.Default.ContentCopy, null, Modifier.size(13.dp))
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    text = stringResource(R.string.action_copy),
-                    style = MaterialTheme.typography.labelLarge
-                )
-            }
-        }
+        PanelLabel(text = morseLabel, lampColor = phosphor)
 
         ReadoutWell(glowColor = phosphor) {
             if (idle) {
@@ -261,7 +193,7 @@ internal fun TransmitBay(uiState: MorseUiState, viewModel: MorseViewModel) {
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 72.dp)
+                        .height(72.dp)
                         .semantics { contentDescription = morseLabel }
                 )
             } else {
@@ -271,25 +203,21 @@ internal fun TransmitBay(uiState: MorseUiState, viewModel: MorseViewModel) {
                     color = phosphor,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 72.dp)
+                        .height(72.dp)
+                        .verticalScroll(rememberScrollState())
                 )
             }
         }
 
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            val supporting = when {
-                uiState.isMorseInvalid -> stringResource(R.string.invalid_morse_sequence)
-                uiState.message.isNotEmpty() -> stringResource(R.string.decodes_to, uiState.message)
-                else -> ""
-            }
             Text(
-                text = supporting,
-                style = MaterialTheme.typography.bodySmall,
-                color = if (uiState.isMorseInvalid) {
-                    MaterialTheme.colorScheme.error
+                text = if (uiState.isMorseInvalid) {
+                    stringResource(R.string.invalid_morse_sequence)
                 } else {
-                    MaterialTheme.colorScheme.outline
+                    ""
                 },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.weight(1f)
             )
             val statusRes = when {
@@ -592,58 +520,18 @@ private fun RepetitionModule(
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.repeat),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = stringResource(
-                        if (repeating) R.string.repeat_continuous else R.string.repeat_single_burst
-                    ),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
+            Text(
+                text = stringResource(R.string.repeat),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f)
+            )
             Spacer(Modifier.width(8.dp))
             ToggleBracket(
                 checked = repeating,
                 onCheckedChange = onChange,
                 enabled = enabled,
                 activeColor = cyan
-            )
-        }
-    }
-}
-
-/** Phosphor bar graph standing in for the RF output meter during transmission. */
-@Composable
-internal fun RfOutputMeter(uiState: MorseUiState) {
-    val phosphor = MaterialTheme.colorScheme.tertiaryContainer
-
-    ChassisPanel(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest) {
-        PanelLabel(text = stringResource(R.string.rf_output), lampColor = phosphor)
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .recessedWell()
-                .padding(6.dp)
-        ) {
-            LinearProgressIndicator(
-                progress = {
-                    val total = uiState.signals.size
-                    if (total > 0) (uiState.currentSignalIndex ?: 0).toFloat() / total else 0f
-                },
-                color = phosphor,
-                trackColor = ChassisRecess,
-                strokeCap = StrokeCap.Butt,
-                gapSize = 0.dp,
-                drawStopIndicator = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(10.dp)
-                    .illuminate(phosphor, 8.dp)
             )
         }
     }
@@ -728,74 +616,3 @@ internal fun TransportBay(uiState: MorseUiState, viewModel: MorseViewModel) {
     }
 }
 
-/** Pull-out reference card listing the international Morse key. */
-@Composable
-internal fun MorseKeyDrawer() {
-    var expanded by remember { mutableStateOf(false) }
-    val amber = MaterialTheme.colorScheme.primaryContainer
-
-    ChassisPanel(
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        contentPadding = 0.dp,
-        showRivets = false,
-        verticalSpacing = 0.dp
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { expanded = !expanded }
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                Icons.AutoMirrored.Filled.MenuBook,
-                contentDescription = null,
-                tint = amber,
-                modifier = Modifier.size(18.dp)
-            )
-            Spacer(Modifier.width(10.dp))
-            Text(
-                text = stringResource(R.string.morse_key_drawer),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.weight(1f)
-            )
-            Icon(
-                if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-
-        if (expanded) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 14.dp, end = 14.dp, bottom = 14.dp)
-                    .recessedWell()
-                    .padding(10.dp)
-            ) {
-                MorseEncoder.referenceTable.chunked(2).forEach { row ->
-                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
-                        row.forEach { (character, code) ->
-                            Row(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = character.toString(),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.width(28.dp)
-                                )
-                                Text(
-                                    text = code,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.tertiaryContainer
-                                )
-                            }
-                        }
-                        if (row.size == 1) Spacer(Modifier.weight(1f))
-                    }
-                }
-            }
-        }
-    }
-}

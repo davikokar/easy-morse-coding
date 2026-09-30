@@ -13,7 +13,7 @@
     <string name="about_message">تطبيق بسيط لترميز إشارات مورس وتشغيلها باستخدام الضوء والصوت.</string>
     <string name="close">إغلاق</string>
     <string name="outputs">المخرجات</string>
-    <string name="phone_flashlight">مصباح الهاتف</string>
+    <string name="phone_flashlight">مصباح</string>
     <string name="not_available"> (غير متاح)</string>
     <string name="no_flashlight_available">لا يتوفر مصباح على هذا الجهاز</string>
     <string name="sound">الصوت</string>

@@ -13,7 +13,7 @@
     <string name="about_message">Una semplice app per codificare e riprodurre segnali Morse usando luce e suono.</string>
     <string name="close">Chiudi</string>
     <string name="outputs">Uscite</string>
-    <string name="phone_flashlight">Torcia del telefono</string>
+    <string name="phone_flashlight">Torcia</string>
     <string name="not_available"> (Non disponibile)</string>
     <string name="no_flashlight_available">Nessuna torcia disponibile su questo dispositivo</string>
     <string name="sound">Suono</string>
