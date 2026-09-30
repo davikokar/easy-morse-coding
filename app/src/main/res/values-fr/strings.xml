@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">DÉLAI</string>
+    <string name="repetition_label">RÉPÉTITION</string>
+    <string name="state_engaged">ÉTAT : ON</string>
+    <string name="state_disarmed">ÉTAT : OFF</string>
     <string name="menu">Menu</string>
     <string name="settings">Paramètres</string>
     <string name="countdown_description">Compte à rebours : %1$d</string>

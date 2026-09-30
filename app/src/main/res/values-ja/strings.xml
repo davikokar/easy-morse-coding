@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">遅延</string>
+    <string name="repetition_label">繰り返し</string>
+    <string name="state_engaged">状態: ON</string>
+    <string name="state_disarmed">状態: OFF</string>
     <string name="menu">メニュー</string>
     <string name="settings">設定</string>
     <string name="countdown_description">カウントダウン: %1$d</string>

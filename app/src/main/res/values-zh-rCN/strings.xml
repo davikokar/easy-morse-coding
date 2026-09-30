@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">延迟</string>
+    <string name="repetition_label">重复</string>
+    <string name="state_engaged">状态: ON</string>
+    <string name="state_disarmed">状态: OFF</string>
     <string name="menu">菜单</string>
     <string name="settings">设置</string>
     <string name="countdown_description">倒计时：%1$d</string>

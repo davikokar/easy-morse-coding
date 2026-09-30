@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">تأخير</string>
+    <string name="repetition_label">تكرار</string>
+    <string name="state_engaged">الحالة: ON</string>
+    <string name="state_disarmed">الحالة: OFF</string>
     <string name="menu">القائمة</string>
     <string name="settings">الإعدادات</string>
     <string name="countdown_description">العد التنازلي: %1$d</string>

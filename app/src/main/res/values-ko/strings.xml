@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">지연</string>
+    <string name="repetition_label">반복</string>
+    <string name="state_engaged">상태: ON</string>
+    <string name="state_disarmed">상태: OFF</string>
     <string name="menu">메뉴</string>
     <string name="settings">설정</string>
     <string name="countdown_description">카운트다운: %1$d</string>
