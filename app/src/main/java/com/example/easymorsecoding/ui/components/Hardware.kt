@@ -105,24 +105,17 @@ fun Modifier.recessedWell(
 fun Modifier.illuminate(color: Color, radius: Dp = 12.dp): Modifier =
     shadow(elevation = radius, shape = RectangleShape, ambientColor = color, spotColor = color)
 
-/** Inset stamped fastener anchoring a panel corner. */
-@Composable
-fun Rivet(modifier: Modifier = Modifier, size: Dp = 6.dp) {
-    Box(
-        modifier = modifier
-            .size(size)
-            .drawBehind {
-                drawCircle(
-                    brush = Brush.verticalGradient(
-                        listOf(ChassisRivet, Color.Black)
-                    )
-                )
-            }
-    )
+/** Inset stamped fasteners at the top corners of a panel. */
+private fun Modifier.cornerRivets(color: Color): Modifier = drawBehind {
+    val radius = 3.dp.toPx()
+    val inset = 8.dp.toPx()
+    drawCircle(color, radius, Offset(inset, inset))
+    drawCircle(color, radius, Offset(size.width - inset, inset))
 }
 
 /**
  * A modular plug-in equipment cassette: chassis surface, hard bevel, corner fasteners.
+ * Height follows the caller so panels can be given a weight in a flexible column.
  */
 @Composable
 fun ChassisPanel(
@@ -133,24 +126,16 @@ fun ChassisPanel(
     verticalSpacing: Dp = 10.dp,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Box(
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .background(containerColor)
             .chassisBevel()
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(verticalSpacing),
-            content = content
-        )
-        if (showRivets) {
-            Rivet(Modifier.align(Alignment.TopStart).padding(5.dp))
-            Rivet(Modifier.align(Alignment.TopEnd).padding(5.dp))
-        }
-    }
+            .then(if (showRivets) Modifier.cornerRivets(ChassisRivet) else Modifier)
+            .padding(contentPadding),
+        verticalArrangement = Arrangement.spacedBy(verticalSpacing),
+        content = content
+    )
 }
 
 /** Discrete jewel lens: deep tinted resin when dark, saturated core with bloom when lit. */

@@ -71,7 +71,7 @@ internal fun StationHeader(uiState: MorseUiState, onOpenSettings: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .padding(start = 14.dp, end = 6.dp, top = 8.dp, bottom = 8.dp),
+            .padding(start = 14.dp, end = 6.dp, top = 2.dp, bottom = 2.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -133,7 +133,11 @@ internal fun CountdownBay(seconds: Int) {
 
 /** Message entry well plus the phosphor-green Morse readout. */
 @Composable
-internal fun TransmitBay(uiState: MorseUiState, viewModel: MorseViewModel) {
+internal fun TransmitBay(
+    uiState: MorseUiState,
+    viewModel: MorseViewModel,
+    modifier: Modifier = Modifier
+) {
     val idle = uiState.playbackState == PlaybackState.IDLE
     val amber = MaterialTheme.colorScheme.primaryContainer
     val phosphor = MaterialTheme.colorScheme.tertiaryContainer
@@ -152,10 +156,15 @@ internal fun TransmitBay(uiState: MorseUiState, viewModel: MorseViewModel) {
     val messageLabel = stringResource(R.string.message_to_encode)
     val morseLabel = stringResource(R.string.morse_code_label)
 
-    ChassisPanel(verticalSpacing = 8.dp) {
+    ChassisPanel(modifier = modifier, verticalSpacing = 8.dp) {
         PanelLabel(text = messageLabel, lampColor = amber)
 
-        ReadoutWell(glowColor = amber) {
+        ReadoutWell(
+            glowColor = amber,
+            modifier = Modifier
+                .weight(1.2f)
+                .heightIn(min = 56.dp)
+        ) {
             BasicTextField(
                 value = uiState.message,
                 onValueChange = viewModel::onMessageChange,
@@ -164,15 +173,19 @@ internal fun TransmitBay(uiState: MorseUiState, viewModel: MorseViewModel) {
                 cursorBrush = SolidColor(amber),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(88.dp)
+                    .fillMaxSize()
                     .semantics { contentDescription = messageLabel }
             )
         }
 
         PanelLabel(text = morseLabel, lampColor = phosphor)
 
-        ReadoutWell(glowColor = phosphor) {
+        ReadoutWell(
+            glowColor = phosphor,
+            modifier = Modifier
+                .weight(1f)
+                .heightIn(min = 48.dp)
+        ) {
             if (idle) {
                 BasicTextField(
                     value = morseField,
@@ -190,8 +203,7 @@ internal fun TransmitBay(uiState: MorseUiState, viewModel: MorseViewModel) {
                         imeAction = ImeAction.Done
                     ),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(72.dp)
+                        .fillMaxSize()
                         .semantics { contentDescription = morseLabel }
                 )
             } else {
@@ -200,8 +212,7 @@ internal fun TransmitBay(uiState: MorseUiState, viewModel: MorseViewModel) {
                     style = MaterialTheme.typography.bodyLarge,
                     color = phosphor,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(72.dp)
+                        .fillMaxSize()
                         .verticalScroll(rememberScrollState())
                 )
             }
@@ -254,12 +265,16 @@ private fun highlightedMorse(uiState: MorseUiState, phosphor: Color) = buildAnno
 
 /** Recessed acrylic-fronted display window. */
 @Composable
-private fun ReadoutWell(glowColor: Color, content: @Composable () -> Unit) {
+private fun ReadoutWell(
+    glowColor: Color,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .recessedWell(background = ChassisGlass)
-            .padding(12.dp)
+            .padding(10.dp)
     ) {
         CompositionLocalProvider(LocalContentColor provides glowColor) { content() }
     }

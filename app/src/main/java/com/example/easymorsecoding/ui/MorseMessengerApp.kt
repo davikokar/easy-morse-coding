@@ -59,7 +59,6 @@ fun MorseMessengerApp(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
                 .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -67,7 +66,11 @@ fun MorseMessengerApp(
                 CountdownBay(uiState.currentCountdown ?: 0)
             }
 
-            TransmitBay(uiState = uiState, viewModel = viewModel)
+            TransmitBay(
+                uiState = uiState,
+                viewModel = viewModel,
+                modifier = Modifier.weight(1f)
+            )
 
             OptionsBay(
                 uiState = uiState,
