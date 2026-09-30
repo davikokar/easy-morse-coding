@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">지연</string>
+    <string name="repetition_label">반복</string>
+    <string name="state_engaged">상태: ON</string>
+    <string name="state_disarmed">상태: OFF</string>
     <string name="menu">메뉴</string>
     <string name="settings">설정</string>
     <string name="countdown_description">카운트다운: %1$d</string>
@@ -13,7 +17,7 @@
     <string name="about_message">빛과 소리를 사용해 모스 부호 신호를 인코딩하고 재생하는 간단한 앱입니다.</string>
     <string name="close">닫기</string>
     <string name="outputs">출력</string>
-    <string name="phone_flashlight">휴대전화 손전등</string>
+    <string name="phone_flashlight">손전등</string>
     <string name="not_available"> (사용할 수 없음)</string>
     <string name="no_flashlight_available">이 기기에서는 손전등을 사용할 수 없습니다</string>
     <string name="sound">소리</string>

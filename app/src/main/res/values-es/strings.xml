@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">RETARDO</string>
+    <string name="repetition_label">REPETICIÓN</string>
+    <string name="state_engaged">ESTADO: ON</string>
+    <string name="state_disarmed">ESTADO: OFF</string>
     <string name="menu">Menú</string>
     <string name="settings">Ajustes</string>
     <string name="countdown_description">Cuenta atrás: %1$d</string>
@@ -13,7 +17,7 @@
     <string name="about_message">Una aplicación sencilla para codificar y reproducir señales Morse mediante luz y sonido.</string>
     <string name="close">Cerrar</string>
     <string name="outputs">Salidas</string>
-    <string name="phone_flashlight">Linterna del teléfono</string>
+    <string name="phone_flashlight">Linterna</string>
     <string name="not_available"> (No disponible)</string>
     <string name="no_flashlight_available">Este dispositivo no dispone de linterna</string>
     <string name="sound">Sonido</string>

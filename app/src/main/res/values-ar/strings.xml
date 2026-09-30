@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">تأخير</string>
+    <string name="repetition_label">تكرار</string>
+    <string name="state_engaged">الحالة: ON</string>
+    <string name="state_disarmed">الحالة: OFF</string>
     <string name="menu">القائمة</string>
     <string name="settings">الإعدادات</string>
     <string name="countdown_description">العد التنازلي: %1$d</string>
@@ -13,7 +17,7 @@
     <string name="about_message">تطبيق بسيط لترميز إشارات مورس وتشغيلها باستخدام الضوء والصوت.</string>
     <string name="close">إغلاق</string>
     <string name="outputs">المخرجات</string>
-    <string name="phone_flashlight">مصباح الهاتف</string>
+    <string name="phone_flashlight">مصباح</string>
     <string name="not_available"> (غير متاح)</string>
     <string name="no_flashlight_available">لا يتوفر مصباح على هذا الجهاز</string>
     <string name="sound">الصوت</string>

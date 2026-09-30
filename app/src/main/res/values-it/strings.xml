@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">RITARDO</string>
+    <string name="repetition_label">RIPETIZIONE</string>
+    <string name="state_engaged">STATO: ON</string>
+    <string name="state_disarmed">STATO: OFF</string>
     <string name="menu">Menu</string>
     <string name="settings">Impostazioni</string>
     <string name="countdown_description">Conto alla rovescia: %1$d</string>
@@ -13,7 +17,7 @@
     <string name="about_message">Una semplice app per codificare e riprodurre segnali Morse usando luce e suono.</string>
     <string name="close">Chiudi</string>
     <string name="outputs">Uscite</string>
-    <string name="phone_flashlight">Torcia del telefono</string>
+    <string name="phone_flashlight">Torcia</string>
     <string name="not_available"> (Non disponibile)</string>
     <string name="no_flashlight_available">Nessuna torcia disponibile su questo dispositivo</string>
     <string name="sound">Suono</string>

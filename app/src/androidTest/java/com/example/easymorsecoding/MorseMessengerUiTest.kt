@@ -19,7 +19,7 @@ class MorseMessengerUiTest {
     @Test
     fun testTextInputPlayPauseStop() {
         // Find message input and enter text
-        composeTestRule.onNodeWithText("Message to Encode").performTextInput("SOS")
+        composeTestRule.onNodeWithContentDescription("Message to Encode").performTextInput("SOS")
         
         // Verify Morse translation appears
         composeTestRule.onNodeWithText("... --- ...").assertExists()
@@ -45,8 +45,7 @@ class MorseMessengerUiTest {
 
     @Test
     fun settingsScreenShowsOrganizedSections() {
-        composeTestRule.onNodeWithContentDescription("Menu").performClick()
-        composeTestRule.onNodeWithText("Settings").performClick()
+        composeTestRule.onNodeWithContentDescription("Settings").performClick()
 
         listOf("General", "App", "Community & support", "Legal").forEach { section ->
             composeTestRule.onNodeWithText(section).assertExists()

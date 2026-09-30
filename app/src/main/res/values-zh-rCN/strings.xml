@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">延迟</string>
+    <string name="repetition_label">重复</string>
+    <string name="state_engaged">状态: ON</string>
+    <string name="state_disarmed">状态: OFF</string>
     <string name="menu">菜单</string>
     <string name="settings">设置</string>
     <string name="countdown_description">倒计时：%1$d</string>
@@ -13,7 +17,7 @@
     <string name="about_message">一个使用灯光和声音编码及播放摩尔斯电码信号的简单应用。</string>
     <string name="close">关闭</string>
     <string name="outputs">输出</string>
-    <string name="phone_flashlight">手机手电筒</string>
+    <string name="phone_flashlight">手电筒</string>
     <string name="not_available">（不可用）</string>
     <string name="no_flashlight_available">此设备没有可用的手电筒</string>
     <string name="sound">声音</string>

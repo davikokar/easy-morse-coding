@@ -1,4 +1,8 @@
 <resources>
+    <string name="pre_delay_label">遅延</string>
+    <string name="repetition_label">繰り返し</string>
+    <string name="state_engaged">状態: ON</string>
+    <string name="state_disarmed">状態: OFF</string>
     <string name="menu">メニュー</string>
     <string name="settings">設定</string>
     <string name="countdown_description">カウントダウン: %1$d</string>
@@ -13,7 +17,7 @@
     <string name="about_message">光と音を使ってモールス信号を符号化し、再生するシンプルなアプリです。</string>
     <string name="close">閉じる</string>
     <string name="outputs">出力</string>
-    <string name="phone_flashlight">スマートフォンのライト</string>
+    <string name="phone_flashlight">ライト</string>
     <string name="not_available">（使用不可）</string>
     <string name="no_flashlight_available">この端末ではライトを使用できません</string>
     <string name="sound">サウンド</string>
