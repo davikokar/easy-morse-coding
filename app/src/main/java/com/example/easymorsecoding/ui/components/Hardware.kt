@@ -231,8 +231,9 @@ fun MechanicalButton(
     val seated = pressed && enabled
     val travel by animateDpAsState(if (seated) 3.dp else 0.dp, tween(40), label = "seat")
 
-    val face = if (enabled) containerColor else containerColor.copy(alpha = 0.35f).overChassis()
-    val label = if (enabled) contentColor else contentColor.copy(alpha = 0.38f)
+    // Disabled caps read as an unpowered grey faceplate rather than a faded brand colour.
+    val face = if (enabled) containerColor else MaterialTheme.colorScheme.surfaceContainerHigh
+    val label = if (enabled) contentColor else MaterialTheme.colorScheme.outline
 
     Row(
         modifier = modifier

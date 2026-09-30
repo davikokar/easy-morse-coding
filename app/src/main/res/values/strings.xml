@@ -8,7 +8,7 @@
     <string name="state_engaged">STATE: ON</string>
     <string name="state_disarmed">STATE: OFF</string>
     <string name="pre_delay_label">PRE-DELAY</string>
-    <string name="unit_seconds">SEC</string>
+    <string name="unit_seconds">s</string>
     <string name="repetition_label">REPETITION</string>
     <string name="menu">Menu</string>
     <string name="settings">Settings</string>

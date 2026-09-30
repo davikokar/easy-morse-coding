@@ -70,9 +70,7 @@ internal fun StationHeader(uiState: MorseUiState, onOpenSettings: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceContainerLowest)
             .statusBarsPadding()
-            .chassisBevel()
             .padding(start = 14.dp, end = 6.dp, top = 8.dp, bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -457,18 +455,20 @@ private fun PreDelayModule(
                 enabled = enabled && index > 0,
                 onClick = { onChange(CountdownOptions[index - 1]) }
             )
-            Column(
+            Row(
                 modifier = Modifier
                     .weight(1f)
                     .recessedWell()
-                    .padding(vertical = 8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .padding(vertical = 6.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.Bottom
             ) {
                 Text(
                     text = seconds.toString().padStart(2, '0'),
                     style = MaterialTheme.typography.headlineMedium,
                     color = amber
                 )
+                Spacer(Modifier.width(3.dp))
                 Text(
                     text = stringResource(R.string.unit_seconds),
                     style = MaterialTheme.typography.labelMedium,
@@ -489,11 +489,11 @@ private fun StepperKey(symbol: String, enabled: Boolean, onClick: () -> Unit) {
     MechanicalButton(
         onClick = onClick,
         enabled = enabled,
-        minHeight = 46.dp,
-        horizontalPadding = 10.dp,
-        modifier = Modifier.width(42.dp)
+        minHeight = 32.dp,
+        horizontalPadding = 6.dp,
+        modifier = Modifier.width(32.dp)
     ) {
-        Text(text = symbol, style = MaterialTheme.typography.headlineSmall)
+        Text(text = symbol, style = MaterialTheme.typography.titleMedium)
     }
 }
 
@@ -540,11 +540,7 @@ private fun RepetitionModule(
 /** Transport deck carrying the primary keying control. */
 @Composable
 internal fun TransportBay(uiState: MorseUiState, viewModel: MorseViewModel) {
-    ChassisPanel(
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        contentPadding = 14.dp,
-        showRivets = false
-    ) {
+    ChassisPanel(containerColor = MaterialTheme.colorScheme.surfaceContainerLowest) {
         if (uiState.playbackState == PlaybackState.IDLE) {
             MechanicalButton(
                 onClick = viewModel::startPlayback,
@@ -552,7 +548,7 @@ internal fun TransportBay(uiState: MorseUiState, viewModel: MorseViewModel) {
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 glow = true,
-                minHeight = 62.dp,
+                minHeight = 48.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Icon(Icons.Default.PlayArrow, null, Modifier.size(26.dp))
@@ -578,7 +574,7 @@ internal fun TransportBay(uiState: MorseUiState, viewModel: MorseViewModel) {
                             MaterialTheme.colorScheme.onSecondaryContainer
                         },
                         glow = true,
-                        minHeight = 54.dp,
+                        minHeight = 48.dp,
                         modifier = Modifier.weight(1f)
                     ) {
                         Icon(
@@ -601,7 +597,7 @@ internal fun TransportBay(uiState: MorseUiState, viewModel: MorseViewModel) {
                     containerColor = HazardRed,
                     contentColor = Color.Black,
                     glow = true,
-                    minHeight = 54.dp,
+                    minHeight = 48.dp,
                     modifier = Modifier.weight(1f)
                 ) {
                     Icon(Icons.Default.Stop, null, Modifier.size(20.dp))
