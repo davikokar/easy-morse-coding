@@ -1,13 +1,9 @@
 package com.example.easymorsecoding.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -16,23 +12,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import com.example.easymorsecoding.LocaleHelper
 import com.example.easymorsecoding.R
+import com.example.easymorsecoding.viewmodel.MorseUiState
 import com.example.easymorsecoding.viewmodel.MorseViewModel
 import com.example.easymorsecoding.viewmodel.PlaybackState
 import java.util.Locale
@@ -50,39 +35,7 @@ fun MorseMessengerApp(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     
-    var menuExpanded by remember { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
-
-    // Local state for Morse input to handle cursor position correctly
-    var morseTextFieldValue by remember { mutableStateOf(TextFieldValue(uiState.morseDisplay)) }
-
-    // Sync from ViewModel to local state (e.g. when Message area changes)
-    LaunchedEffect(uiState.morseDisplay) {
-        if (morseTextFieldValue.text != uiState.morseDisplay) {
-            morseTextFieldValue = TextFieldValue(
-                text = uiState.morseDisplay,
-                selection = TextRange(uiState.morseDisplay.length)
-            )
-        }
-    }
-
-    val morseAnnotatedString = buildAnnotatedString {
-        append(uiState.morseDisplay)
-        val currentIndex = uiState.currentSignalIndex
-        if (currentIndex != null && currentIndex in uiState.signalRanges.indices) {
-            val range = uiState.signalRanges[currentIndex]
-            if (range != null && range.first < uiState.morseDisplay.length) {
-                addStyle(
-                    style = SpanStyle(
-                        color = Color.White,
-                        background = Color.Black
-                    ),
-                    start = range.first,
-                    end = (range.last + 1).coerceAtMost(uiState.morseDisplay.length)
-                )
-            }
-        }
-    }
 
     if (showSettings) {
         SettingsScreen(
@@ -99,169 +52,44 @@ fun MorseMessengerApp(
     }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Morse Messenger") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                actions = {
-                    Box {
-                        IconButton(onClick = { menuExpanded = true }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.menu))
-                        }
-                        DropdownMenu(
-                            expanded = menuExpanded,
-                            onDismissRequest = { menuExpanded = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.settings)) },
-                                onClick = {
-                                    menuExpanded = false
-                                    showSettings = true
-                                },
-                                leadingIcon = { Icon(Icons.Default.Settings, contentDescription = null) }
-                            )
-                        }
-                    }
-                }
-            )
-        }
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = { StationHeader(uiState = uiState, onOpenSettings = { showSettings = true }) }
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .verticalScroll(rememberScrollState())
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            // Countdown Display
             if (uiState.playbackState == PlaybackState.COUNTDOWN) {
-                val countdownDescription = stringResource(R.string.countdown_description, uiState.currentCountdown ?: 0)
-                Text(
-                    text = uiState.currentCountdown?.toString() ?: "",
-                    fontSize = 64.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.semantics { contentDescription = countdownDescription }
-                )
+                CountdownBay(uiState.currentCountdown ?: 0)
             }
 
-            // Text Input
-            OutlinedTextField(
-                value = uiState.message,
-                onValueChange = { viewModel.onMessageChange(it) },
-                label = { Text(stringResource(R.string.message_to_encode)) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                minLines = 3,
-                enabled = uiState.playbackState == PlaybackState.IDLE,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
-            )
+            TransmitBay(uiState = uiState, viewModel = viewModel)
 
-            // Morse Input/Display
-            OutlinedTextField(
-                value = if (uiState.playbackState == PlaybackState.IDLE) {
-                    morseTextFieldValue
-                } else {
-                    TextFieldValue(morseAnnotatedString)
-                },
-                onValueChange = { 
-                    if (uiState.playbackState == PlaybackState.IDLE) {
-                        morseTextFieldValue = it
-                        viewModel.onMorseChange(it.text) 
-                    }
-                },
-                label = { Text(stringResource(R.string.morse_code_label)) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                minLines = 2,
-                enabled = uiState.playbackState == PlaybackState.IDLE,
-                isError = uiState.isMorseInvalid,
-                supportingText = {
-                    if (uiState.isMorseInvalid) {
-                        Text(stringResource(R.string.invalid_morse_sequence), color = MaterialTheme.colorScheme.error)
-                    } else if (uiState.message.isNotEmpty()) {
-                        Text(stringResource(R.string.decodes_to, uiState.message), style = MaterialTheme.typography.bodySmall)
-                    }
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email, // Email keyboard often has . and - prominent
-                    imeAction = ImeAction.Done
-                )
-            )
-
-            // Playback Progress
-            if (uiState.playbackState == PlaybackState.PLAYING) {
-                PlaybackProgress(uiState = uiState)
-            }
-
-            // Controls
-            SettingsSection(
+            OptionsBay(
                 uiState = uiState,
                 viewModel = viewModel,
                 onRequestPermission = onRequestPermission
             )
 
-            // Play/Pause/Stop Buttons
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                if (uiState.playbackState == PlaybackState.IDLE) {
-                    Button(
-                        onClick = { viewModel.startPlayback() },
-                        modifier = Modifier.weight(1f),
-                        enabled = uiState.message.isNotBlank()
-                    ) {
-                        Icon(Icons.Default.PlayArrow, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.play))
-                    }
-                } else {
-                    if (uiState.playbackState == PlaybackState.PLAYING) {
-                        Button(
-                            onClick = { viewModel.togglePause() },
-                            modifier = Modifier.weight(1f),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = if (uiState.isPaused) MaterialTheme.colorScheme.secondary 
-                                                else MaterialTheme.colorScheme.tertiary
-                            )
-                        ) {
-                            Icon(
-                                if (uiState.isPaused) Icons.Default.PlayArrow else Icons.Default.Pause,
-                                contentDescription = null
-                            )
-                            Spacer(Modifier.width(8.dp))
-                            Text(stringResource(if (uiState.isPaused) R.string.resume else R.string.pause))
-                        }
-                    }
-                    
-                    Button(
-                        onClick = { viewModel.stopPlayback() },
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-                    ) {
-                        Icon(Icons.Default.Stop, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.stop))
-                    }
-                }
+            if (uiState.playbackState == PlaybackState.PLAYING) {
+                RfOutputMeter(uiState = uiState)
             }
+
+            TransportBay(uiState = uiState, viewModel = viewModel)
+
+            MorseKeyDrawer()
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    uiState: com.example.easymorsecoding.viewmodel.MorseUiState,
+    uiState: MorseUiState,
     viewModel: MorseViewModel,
     onBack: () -> Unit,
     onLanguageSelected: (String) -> Unit,
@@ -278,18 +106,24 @@ fun SettingsScreen(
 
     BackHandler(onBack = onBack)
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.settings_title)) },
+                title = {
+                    Text(
+                        text = stringResource(R.string.settings_title),
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
         }
@@ -307,7 +141,7 @@ fun SettingsScreen(
             SettingsRow(Icons.Default.Schedule, stringResource(R.string.settings_timings)) {
                 dialog = SettingsDialogType.TIMINGS
             }
-            HorizontalDivider()
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             SettingsSectionHeader(stringResource(R.string.settings_app))
             SettingsRow(Icons.Default.Share, stringResource(R.string.settings_share_app), onShareApp)
@@ -316,11 +150,11 @@ fun SettingsScreen(
             SettingsRow(Icons.Default.Info, stringResource(R.string.settings_about)) {
                 dialog = SettingsDialogType.ABOUT
             }
-            HorizontalDivider()
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             SettingsSectionHeader(stringResource(R.string.settings_community_support))
             SettingsRow(Icons.Default.Coffee, stringResource(R.string.settings_buy_coffee), onBuyCoffee)
-            HorizontalDivider()
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
             SettingsSectionHeader(stringResource(R.string.settings_legal))
             SettingsRow(Icons.Default.PrivacyTip, stringResource(R.string.settings_privacy)) {
@@ -374,15 +208,14 @@ private fun SettingsSectionHeader(title: String) {
     Text(
         text = title,
         modifier = Modifier.padding(start = 24.dp, top = 24.dp, end = 24.dp, bottom = 8.dp),
-        style = MaterialTheme.typography.labelLarge,
-        color = MaterialTheme.colorScheme.primary,
-        fontWeight = FontWeight.Bold
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.primaryContainer
     )
 }
 
 @Composable
 private fun SettingsRow(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     label: String,
     onClick: () -> Unit
 ) {
@@ -396,8 +229,8 @@ private fun SettingsRow(
     ) {
         Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.width(20.dp))
-        Text(label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
-        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+        Icon(Icons.Default.ChevronRight, contentDescription = null, tint = MaterialTheme.colorScheme.outline)
     }
 }
 
@@ -409,6 +242,7 @@ private fun LanguageDialog(onLanguageSelected: (String) -> Unit, onDismiss: () -
 
     AlertDialog(
         onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
         title = { Text(stringResource(R.string.settings_change_language)) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -447,6 +281,7 @@ private fun LanguageDialog(onLanguageSelected: (String) -> Unit, onDismiss: () -
 private fun InformationDialog(title: String, message: String, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
         title = { Text(title) },
         text = { Text(message) },
         confirmButton = {
@@ -456,100 +291,8 @@ private fun InformationDialog(title: String, message: String, onDismiss: () -> U
 }
 
 @Composable
-fun PlaybackProgress(uiState: com.example.easymorsecoding.viewmodel.MorseUiState) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        LinearProgressIndicator(
-            progress = {
-                val total = uiState.signals.size
-                val current = uiState.currentSignalIndex ?: 0
-                if (total > 0) current.toFloat() / total else 0f
-            },
-            modifier = Modifier.fillMaxWidth(),
-        )
-    }
-}
-
-@Composable
-fun SettingsSection(
-    uiState: com.example.easymorsecoding.viewmodel.MorseUiState,
-    viewModel: MorseViewModel,
-    onRequestPermission: () -> Unit
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(stringResource(R.string.outputs), fontWeight = FontWeight.Bold)
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = uiState.useFlashlight,
-                onCheckedChange = { 
-                    if (it) onRequestPermission() else viewModel.onToggleFlashlight(false)
-                },
-                enabled = uiState.playbackState == PlaybackState.IDLE && uiState.hasFlashlight
-            )
-            Text(stringResource(R.string.phone_flashlight))
-            if (!uiState.hasFlashlight) {
-                Text(
-                    stringResource(R.string.not_available),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(
-                checked = uiState.useSound,
-                onCheckedChange = { viewModel.onToggleSound(it) },
-                enabled = uiState.playbackState == PlaybackState.IDLE
-            )
-            Text(stringResource(R.string.sound))
-        }
-
-        HorizontalDivider()
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(stringResource(R.string.countdown))
-            val countdownOptions = listOf(0, 3, 5, 10, 30)
-            var expanded by remember { mutableStateOf(false) }
-            
-            Box {
-                TextButton(
-                    onClick = { expanded = true },
-                    enabled = uiState.playbackState == PlaybackState.IDLE
-                ) {
-                    Text(stringResource(R.string.seconds_short, uiState.countdownSeconds))
-                }
-                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                    countdownOptions.forEach { seconds ->
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.seconds_short, seconds)) },
-                            onClick = {
-                                viewModel.onCountdownSecondsChange(seconds)
-                                expanded = false
-                            }
-                        )
-                    }
-                }
-            }
-
-            Spacer(Modifier.weight(1f))
-            Checkbox(
-                checked = uiState.repeatEnabled,
-                onCheckedChange = { viewModel.onRepeatChange(it) },
-                enabled = uiState.playbackState == PlaybackState.IDLE
-            )
-            Text(stringResource(R.string.repeat))
-        }
-    }
-}
-
-@Composable
 fun SettingsDialog(
-    uiState: com.example.easymorsecoding.viewmodel.MorseUiState,
+    uiState: MorseUiState,
     onDotChange: (Int) -> Unit,
     onDashChange: (Int) -> Unit,
     onCharGapChange: (Int) -> Unit,
@@ -560,23 +303,32 @@ fun SettingsDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
         title = { Text(stringResource(R.string.timing_settings)) },
         text = {
             Column(
                 modifier = Modifier.verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                Text(stringResource(R.string.speed), fontWeight = FontWeight.Bold)
+                Text(
+                    text = stringResource(R.string.speed),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primaryContainer
+                )
                 TimingSliderFloat(
                     label = stringResource(R.string.unit_duration),
                     value = uiState.secondsPerUnit,
                     onValueChange = onSecondsPerUnitChange,
                     range = 0.1f..2.0f
                 )
-                
-                HorizontalDivider()
-                
-                Text(stringResource(R.string.multipliers), fontWeight = FontWeight.Bold)
+
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+                Text(
+                    text = stringResource(R.string.multipliers),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primaryContainer
+                )
                 TimingSlider(label = stringResource(R.string.dot_duration), units = uiState.dotUnits, onValueChange = onDotChange, range = 1f..5f)
                 TimingSlider(label = stringResource(R.string.dash_duration), units = uiState.dashUnits, onValueChange = onDashChange, range = 1f..10f)
                 TimingSlider(label = stringResource(R.string.character_gap), units = uiState.charGapUnits, onValueChange = onCharGapChange, range = 1f..10f)
@@ -605,7 +357,11 @@ fun TimingSliderFloat(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(label, style = MaterialTheme.typography.bodyMedium)
-            Text(stringResource(R.string.duration_seconds, value), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+            Text(
+                text = stringResource(R.string.duration_seconds, value),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primaryContainer
+            )
         }
         Slider(
             value = value,
@@ -629,7 +385,11 @@ fun TimingSlider(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(label, style = MaterialTheme.typography.bodyMedium)
-            Text(stringResource(R.string.unit_count, units), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+            Text(
+                text = stringResource(R.string.unit_count, units),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primaryContainer
+            )
         }
         Slider(
             value = units.toFloat(),
