@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.easymorsecoding"
+    namespace = "com.davide.seddio.easymorsecoding"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.easymorsecoding"
+        applicationId = "com.davide.seddio.easymorsecoding"
         minSdk = 28
         targetSdk = 37
         versionCode = 1
