@@ -60,6 +60,4 @@
     <string name="settings_legal">Informações legais</string>
     <string name="settings_privacy">Política de privacidade</string>
     <string name="settings_terms">Termos</string>
-    <string name="privacy_policy_text">O Easy Morse Coding processa o texto da mensagem somente no seu dispositivo para convertê-lo de e para código Morse. O aplicativo não coleta, armazena nem compartilha dados pessoais. A permissão da câmera é usada apenas para controlar a lanterna durante a reprodução.</string>
-    <string name="terms_text">O Easy Morse Coding é fornecido no estado em que se encontra para uso pessoal. A reprodução Morse não deve ser usada para comunicações de emergência. Você é responsável por usar os recursos de lanterna e som de forma segura e legal.</string>
 </resources>

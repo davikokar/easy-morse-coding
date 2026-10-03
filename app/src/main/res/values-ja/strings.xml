@@ -60,6 +60,4 @@
     <string name="settings_legal">法的情報</string>
     <string name="settings_privacy">プライバシーポリシー</string>
     <string name="settings_terms">利用規約</string>
-    <string name="privacy_policy_text">Easy Morse Coding は、モールス符号への変換と復号のために、メッセージのテキストを端末上でのみ処理します。個人データの収集、保存、共有は行いません。カメラの権限は、再生中にライトを制御するためにのみ使用されます。</string>
-    <string name="terms_text">Easy Morse Coding は個人利用向けに現状のまま提供されます。モールス再生を緊急時の通信に使用しないでください。ライトとサウンド機能は、安全かつ合法的に使用する責任があります。</string>
 </resources>

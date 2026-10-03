@@ -12,6 +12,7 @@ import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryPurchasesParams
 
 class BillingHelper(private val activity: Activity) : PurchasesUpdatedListener {
     private var productDetails: ProductDetails? = null
@@ -29,6 +30,7 @@ class BillingHelper(private val activity: Activity) : PurchasesUpdatedListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     queryProductDetails()
+                    consumePendingPurchases()
                 }
             }
 
@@ -51,6 +53,19 @@ class BillingHelper(private val activity: Activity) : PurchasesUpdatedListener {
         billingClient.queryProductDetailsAsync(params) { billingResult, result ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 productDetails = result.productDetailsList.find { it.productId == PRODUCT_ID }
+            }
+        }
+    }
+
+    private fun consumePendingPurchases() {
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.INAPP)
+            .build()
+        billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                purchases
+                    .filter { it.purchaseState == Purchase.PurchaseState.PURCHASED }
+                    .forEach(::consumePurchase)
             }
         }
     }

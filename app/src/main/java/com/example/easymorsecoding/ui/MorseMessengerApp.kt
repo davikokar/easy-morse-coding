@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.example.easymorsecoding.LocaleHelper
@@ -97,6 +98,9 @@ fun SettingsScreen(
 ) {
     var dialog by remember { mutableStateOf<SettingsDialogType?>(null) }
     val context = androidx.compose.ui.platform.LocalContext.current
+    val uriHandler = LocalUriHandler.current
+    val privacyUrl = stringResource(R.string.url_privacy)
+    val termsUrl = stringResource(R.string.url_terms)
     val versionName = remember(context) {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName.orEmpty()
     }
@@ -155,10 +159,10 @@ fun SettingsScreen(
 
             SettingsSectionHeader(stringResource(R.string.settings_legal))
             SettingsRow(Icons.Default.PrivacyTip, stringResource(R.string.settings_privacy)) {
-                dialog = SettingsDialogType.PRIVACY
+                runCatching { uriHandler.openUri(privacyUrl) }
             }
             SettingsRow(Icons.Default.Description, stringResource(R.string.settings_terms)) {
-                dialog = SettingsDialogType.TERMS
+                runCatching { uriHandler.openUri(termsUrl) }
             }
         }
     }
@@ -184,21 +188,11 @@ fun SettingsScreen(
                 stringResource(R.string.about_version, versionName),
             onDismiss = { dialog = null }
         )
-        SettingsDialogType.PRIVACY -> InformationDialog(
-            title = stringResource(R.string.settings_privacy),
-            message = stringResource(R.string.privacy_policy_text),
-            onDismiss = { dialog = null }
-        )
-        SettingsDialogType.TERMS -> InformationDialog(
-            title = stringResource(R.string.settings_terms),
-            message = stringResource(R.string.terms_text),
-            onDismiss = { dialog = null }
-        )
         null -> Unit
     }
 }
 
-private enum class SettingsDialogType { LANGUAGE, TIMINGS, ABOUT, PRIVACY, TERMS }
+private enum class SettingsDialogType { LANGUAGE, TIMINGS, ABOUT }
 
 @Composable
 private fun SettingsSectionHeader(title: String) {
