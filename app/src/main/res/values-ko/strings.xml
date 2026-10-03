@@ -60,6 +60,4 @@
     <string name="settings_legal">법적 정보</string>
     <string name="settings_privacy">개인정보 처리방침</string>
     <string name="settings_terms">이용약관</string>
-    <string name="privacy_policy_text">Easy Morse Coding은 모스 부호로 변환하고 해독하기 위해 메시지 텍스트를 기기에서만 처리합니다. 앱은 개인 데이터를 수집, 저장 또는 공유하지 않습니다. 카메라 권한은 재생 중 손전등을 제어하는 용도로만 사용됩니다.</string>
-    <string name="terms_text">Easy Morse Coding은 개인 용도로 있는 그대로 제공됩니다. 모스 재생을 긴급 통신에 의존해서는 안 됩니다. 손전등과 소리 기능을 안전하고 합법적으로 사용할 책임은 사용자에게 있습니다.</string>
 </resources>

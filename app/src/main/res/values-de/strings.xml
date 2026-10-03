@@ -60,6 +60,4 @@
     <string name="settings_legal">Rechtliches</string>
     <string name="settings_privacy">Datenschutzrichtlinie</string>
     <string name="settings_terms">Bedingungen</string>
-    <string name="privacy_policy_text">Easy Morse Coding verarbeitet Nachrichtentext nur auf deinem Gerät, um ihn in Morsecode und zurück umzuwandeln. Die App erhebt, speichert oder teilt keine personenbezogenen Daten. Die Kameraberechtigung wird nur zur Steuerung der Taschenlampe während der Wiedergabe verwendet.</string>
-    <string name="terms_text">Easy Morse Coding wird ohne Gewähr für den persönlichen Gebrauch bereitgestellt. Die Morsewiedergabe darf nicht für Notfallkommunikation verwendet werden. Du bist dafür verantwortlich, Taschenlampe und Ton sicher und rechtmäßig zu verwenden.</string>
 </resources>

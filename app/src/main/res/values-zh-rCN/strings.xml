@@ -60,6 +60,4 @@
     <string name="settings_legal">法律信息</string>
     <string name="settings_privacy">隐私政策</string>
     <string name="settings_terms">条款</string>
-    <string name="privacy_policy_text">Easy Morse Coding 仅在您的设备上处理消息文本，以便在文本与摩尔斯电码之间进行转换。本应用不会收集、存储或分享个人数据。相机权限仅用于在播放时控制手电筒。</string>
-    <string name="terms_text">Easy Morse Coding 按现状提供，仅供个人使用。请勿依赖摩尔斯电码播放进行紧急通信。您有责任以安全且合法的方式使用手电筒和声音功能。</string>
 </resources>

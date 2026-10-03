@@ -60,6 +60,4 @@
     <string name="settings_legal">Note legali</string>
     <string name="settings_privacy">Informativa sulla privacy</string>
     <string name="settings_terms">Termini</string>
-    <string name="privacy_policy_text">Easy Morse Coding elabora il testo dei messaggi solo sul tuo dispositivo per convertirlo da e verso il codice Morse. L’app non raccoglie, memorizza o condivide dati personali. Il permesso della fotocamera viene usato solo per controllare la torcia durante la riproduzione.</string>
-    <string name="terms_text">Easy Morse Coding viene fornito così com’è per uso personale. La riproduzione Morse non deve essere usata per comunicazioni di emergenza. Sei responsabile dell’uso sicuro e legale delle funzioni torcia e audio.</string>
 </resources>

@@ -60,6 +60,4 @@
     <string name="settings_legal">Mentions légales</string>
     <string name="settings_privacy">Politique de confidentialité</string>
     <string name="settings_terms">Conditions</string>
-    <string name="privacy_policy_text">Easy Morse Coding traite le texte des messages uniquement sur votre appareil afin de le convertir vers et depuis le code Morse. L’application ne collecte, ne stocke et ne partage aucune donnée personnelle. L’autorisation de la caméra sert uniquement à contrôler la lampe torche pendant la lecture.</string>
-    <string name="terms_text">Easy Morse Coding est fourni en l’état pour un usage personnel. La lecture Morse ne doit pas être utilisée pour les communications d’urgence. Vous devez utiliser les fonctions de lampe torche et de son de manière sûre et légale.</string>
 </resources>

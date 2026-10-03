@@ -68,6 +68,6 @@
     <string name="settings_legal">Legal</string>
     <string name="settings_privacy">Privacy policy</string>
     <string name="settings_terms">Terms</string>
-    <string name="privacy_policy_text">Easy Morse Coding processes message text only on your device to convert it to and from Morse code. The app does not collect, store, or share personal data. Camera permission is used only to control the flashlight during playback.</string>
-    <string name="terms_text">Easy Morse Coding is provided as-is for personal use. Morse playback must not be relied upon for emergency communication. You are responsible for using the flashlight and sound features safely and lawfully.</string>
+    <string name="url_privacy" translatable="false">https://davikokar.github.io/android-docs/easy-morse-coder/privacy.html</string>
+    <string name="url_terms" translatable="false">https://davikokar.github.io/android-docs/easy-morse-coder/terms.html</string>
 </resources>

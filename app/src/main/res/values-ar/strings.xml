@@ -60,6 +60,4 @@
     <string name="settings_legal">قانوني</string>
     <string name="settings_privacy">سياسة الخصوصية</string>
     <string name="settings_terms">الشروط</string>
-    <string name="privacy_policy_text">يعالج Easy Morse Coding نص الرسالة على جهازك فقط لتحويله من شفرة مورس وإليها. لا يجمع التطبيق البيانات الشخصية أو يخزنها أو يشاركها. يُستخدم إذن الكاميرا فقط للتحكم في المصباح أثناء التشغيل.</string>
-    <string name="terms_text">يُقدم Easy Morse Coding كما هو للاستخدام الشخصي. يجب عدم الاعتماد على تشغيل مورس لاتصالات الطوارئ. أنت مسؤول عن استخدام ميزتي المصباح والصوت بأمان وبشكل قانوني.</string>
 </resources>
