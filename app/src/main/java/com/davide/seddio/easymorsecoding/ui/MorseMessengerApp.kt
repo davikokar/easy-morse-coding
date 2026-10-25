@@ -21,6 +21,7 @@ import com.davide.seddio.easymorsecoding.R
 import com.davide.seddio.easymorsecoding.viewmodel.MorseUiState
 import com.davide.seddio.easymorsecoding.viewmodel.MorseViewModel
 import com.davide.seddio.easymorsecoding.viewmodel.PlaybackState
+import java.text.Collator
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -228,7 +229,17 @@ private fun SettingsRow(
 @Composable
 private fun LanguageDialog(onLanguageSelected: (String) -> Unit, onDismiss: () -> Unit) {
     val context = androidx.compose.ui.platform.LocalContext.current
-    val tags = remember { listOf("") + LocaleHelper.supportedLanguageTags }
+    val systemDefaultLabel = stringResource(R.string.language_system_default)
+    val options = remember(systemDefaultLabel) {
+        val collator = Collator.getInstance()
+        val languages = LocaleHelper.supportedLanguageTags
+            .map { tag ->
+                val locale = Locale.forLanguageTag(tag)
+                tag to locale.getDisplayName(locale).replaceFirstChar { it.uppercase(locale) }
+            }
+            .sortedWith(compareBy(collator) { it.second })
+        listOf("" to systemDefaultLabel) + languages
+    }
     var selectedTag by remember { mutableStateOf(LocaleHelper.getPersistedLanguageTag(context)) }
 
     AlertDialog(
@@ -237,13 +248,7 @@ private fun LanguageDialog(onLanguageSelected: (String) -> Unit, onDismiss: () -
         title = { Text(stringResource(R.string.settings_change_language)) },
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
-                tags.forEach { tag ->
-                    val label = if (tag.isEmpty()) {
-                        stringResource(R.string.language_system_default)
-                    } else {
-                        val locale = Locale.forLanguageTag(tag)
-                        locale.getDisplayName(locale).replaceFirstChar { it.uppercase(locale) }
-                    }
+                options.forEach { (tag, label) ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

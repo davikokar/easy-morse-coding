@@ -10,7 +10,8 @@ object LocaleHelper {
     private const val LANGUAGE_KEY = "app_language"
 
     val supportedLanguageTags = listOf(
-        "en", "ar", "de", "es", "fr", "it", "ja", "ko", "pt-BR", "zh-CN"
+        "en", "ar", "de", "es", "fr", "id", "it", "ja", "ko", "pl", "pt-BR",
+        "ro", "th", "tr", "uk", "vi", "zh-CN"
     )
 
     fun getPersistedLanguageTag(context: Context): String =
