@@ -34,6 +34,12 @@ android {
     buildFeatures {
         compose = true
     }
+    bundle {
+        // The app switches language in-app, so all languages must ship in the base APK.
+        language {
+            enableSplit = false
+        }
+    }
 }
 
 dependencies {
